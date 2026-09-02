@@ -37,67 +37,30 @@
     return u === null ? null : Math.round(u * qty * 100) / 100;
   }
 
-  /* ── catalogue ────────────────────────────────────────────
-     Tous les modèles sont gratuits sur MakerWorld : le lien de
-     chaque fiche pointe vers la page d'origine de son auteur.
-     Les poids sont des estimations (PLA, taille d'origine,
-     remplissage 15 %) — le poids exact vient du trancheur.     */
-  var MODELS = [
-    /* ── maison ───────────────────────────────────────── */
-    { id: 'bagclip', name: 'Clips de sachet (lot de 6)', cat: 'maison', g: 22, glyph: '🥨',
-      url: 'https://makerworld.com/en/models/1101226-mini-bag-clip',
-      desc: 'Le petit clip qui referme un paquet de chips ou de pâtes. Une fois qu\'on en a, on en veut partout dans la cuisine.' },
-    { id: 'tube', name: 'Presse-tube à dentifrice', cat: 'maison', g: 20, glyph: '🦷',
-      url: 'https://makerworld.com/en/models/30246-ratcheted-toothpaste-tube-squeezer',
-      desc: 'À cliquet : on tourne, le tube se roule et il ne redescend jamais. Vide le tube jusqu\'à la dernière goutte.' },
-    { id: 'hook', name: 'Crochets muraux (lot de 2)', cat: 'maison', g: 24, glyph: '🪝',
-      url: 'https://makerworld.com/en/models/772124-strong-wall-hook-no-screws',
-      desc: 'Costauds et sans perçage : ils se collent avec une bande adhésive double face. Parfait pour un torchon ou un manteau.' },
-    { id: 'door', name: 'Cale-porte', cat: 'maison', g: 30, glyph: '🚪',
-      url: 'https://makerworld.com/en/models/1596339-door-stopper-door-holder-door-stop',
-      desc: 'Fin, solide, imprimé d\'une pièce. Il glisse sous la porte et la tient ouverte sans marquer le sol.' },
-    { id: 'keys', name: 'Porte-clés mural avec étagères', cat: 'maison', g: 90, glyph: '🔑',
-      url: 'https://makerworld.com/en/models/807967-wall-mount-key-holder-organizer-with-shelves',
-      desc: 'Six crochets pour les clés et deux petites étagères pour le portefeuille et le téléphone. L\'entrée devient nette.' },
-    { id: 'brush', name: 'Porte-brosses à dents mural', cat: 'maison', g: 40, glyph: '🪥',
-      url: 'https://makerworld.com/en/models/379430-wall-mounted-practical-toothbrush-holder',
-      desc: 'Les brosses restent au sec et ne traînent plus sur le lavabo. Se démonte en trois parties pour le nettoyage.' },
-    { id: 'remote', name: 'Range-télécommandes', cat: 'maison', g: 70, glyph: '📺',
-      url: 'https://makerworld.com/en/models/547497-modern-remote-control-holder-remote-caddy',
-      desc: 'Toutes les télécommandes debout au même endroit, sur la table basse. Fin de la chasse au trésor dans le canapé.' },
-
-    /* ── bureau ───────────────────────────────────────── */
-    { id: 'grid', name: 'Bacs Gridfinity (l\'unité)', cat: 'bureau', g: 25, glyph: '🧰',
-      url: 'https://makerworld.com/en/models/47599-ultimate-gridfinity-bins-collection-parametric',
-      desc: 'Le système de rangement modulaire qui a conquis tous les ateliers : des bacs qui s\'emboîtent au millimètre dans un tiroir. Dites-moi les tailles voulues.' },
-    { id: 'cables', name: 'Passe-câbles de bureau', cat: 'bureau', g: 45, glyph: '🔌',
-      url: 'https://makerworld.com/en/models/1400922-desk-cable-management-holder-cable-organizer',
-      desc: 'Des tubes pivotants qui retiennent chaque câble au bord du bureau. Le chargeur ne tombe plus derrière le meuble.' },
-    { id: 'phone', name: 'Support téléphone pliable', cat: 'bureau', g: 10, glyph: '📱',
-      url: 'https://makerworld.com/en/models/1776596-flexistand-print-in-place-foldable-phone-stand',
-      desc: 'Imprimé déjà articulé : il se déplie pour poser le téléphone, se replie à plat et tient dans une poche.' },
-    { id: 'headset', name: 'Support casque à pince', cat: 'bureau', g: 55, glyph: '🎧',
-      url: 'https://makerworld.com/en/models/941155-desk-side-headphone-hanger-clamp-headset-stand',
-      desc: 'Se pince sur le côté du bureau, sans vis ni colle. Le casque est suspendu, le plan de travail est libre.' },
-
-    /* ── articulés ────────────────────────────────────── */
-    { id: 'dragon', name: 'Dragon articulé', cat: 'articule', g: 120, glyph: '🐉',
-      url: 'https://makerworld.com/en/models/603571-print-in-place-articulated-dragon',
-      desc: 'Imprimé d\'un seul tenant, sans support : il ondule dès qu\'on le décolle du plateau. Le cadeau qui impressionne à tous les coups.' },
-    { id: 'spark', name: 'Bébé dragon « Spark »', cat: 'articule', g: 35, glyph: '🦎',
-      url: 'https://makerworld.com/en/models/2005756-spark-articulated-baby-dragon-print-in-place',
-      desc: 'La version de poche du dragon articulé. Idéal en petit cadeau ou en compagnon de bureau à triturer.' },
-
-    /* ── déco ─────────────────────────────────────────── */
-    { id: 'vase', name: 'Vase spiralé', cat: 'deco', g: 15, glyph: '🏺',
-      url: 'https://makerworld.com/en/models/137028-vase-spiral-vase-mode',
-      desc: 'Imprimé en mode vase : une seule paroi continue, très léger, très rapide. Superbe agrandi. Pour de l\'eau, prévoir un tube en verre.' },
-    { id: 'benchy', name: '3DBenchy', cat: 'deco', g: 13, glyph: '⛵',
-      url: 'https://makerworld.com/en/models/1123776-original-3d-benchy',
-      desc: 'Le petit bateau de test le plus imprimé au monde, passé dans le domaine public. Un classique à poser sur une étagère.' }
+  /* ── idées ──────────────────────────────────────────────
+     De simples pistes pour s'inspirer : pas de prix fixe, pas
+     de lien, pas de photo. Le prix dépend toujours du poids
+     réel de la pièce choisie, calculé après passage au
+     trancheur (voir l'estimateur plus bas).                   */
+  var IDEAS = [
+    { cat: 'Maison', items: [
+      'Clips à sachet', 'Presse-tube à dentifrice', 'Crochets muraux',
+      'Cale-porte', 'Porte-clés mural', 'Porte-brosses à dents',
+      'Range-télécommandes', 'Porte-savon', 'Vide-poche'
+    ]},
+    { cat: 'Bureau', items: [
+      'Bacs de rangement modulables', 'Passe-câbles', 'Support téléphone',
+      'Porte-casque', 'Porte-stylos', 'Support d\'écran'
+    ]},
+    { cat: 'Déco', items: [
+      'Affiche / plaque murale en relief', 'Vase', 'Porte-lunettes',
+      'Cadre photo', 'Bougeoir', 'Figurine articulée'
+    ]},
+    { cat: 'Autres', items: [
+      'Porte-savon de douche', 'Range-bijoux', 'Support d\'enceinte',
+      'Pièce de rechange cassée', 'Gabarit ou outil sur mesure'
+    ]}
   ];
-
-  var CAT_LABEL = { maison: 'Maison', bureau: 'Bureau', articule: 'Articulé', deco: 'Déco' };
 
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -136,56 +99,19 @@
     toast('Copie automatique refusée par le navigateur : sélectionnez le texte');
   }
 
-  /* ── rendu du catalogue ───────────────────────────────── */
-  var grid = $('#grid');
-
-  function cardHTML(m, i) {
-    var p = priceFor(m.g);
-    var priceHTML = p === null
-      ? '<span class="price quote">Sur devis<small>PIÈCE DE PLUS DE 200 G</small></span>'
-      : '<span class="price">' + euro(p) + '<small>≈ ' + m.g + ' G DE PLA</small></span>';
-    return '<article class="card" data-cat="' + m.cat + '" style="animation-delay:' + (i % 4) * 60 + 'ms">' +
-      '<div class="card-view">' +
-        '<span class="card-tag">' + CAT_LABEL[m.cat] + '</span>' +
-        '<span class="card-w">≈ ' + m.g + ' g</span>' +
-        '<span class="glyph" role="img" aria-label="' + m.name + '">' + m.glyph + '</span>' +
-      '</div>' +
-      '<div class="card-body">' +
-        '<h3>' + m.name + '</h3>' +
-        '<p>' + m.desc + '</p>' +
-        '<a class="card-link" href="' + m.url + '" target="_blank" rel="noopener noreferrer">Voir le modèle sur MakerWorld</a>' +
-        '<div class="card-foot">' + priceHTML +
-          '<button class="add" type="button" data-add="' + m.id + '">' +
-            (p === null ? 'Demander' : 'Ajouter') + '</button>' +
-        '</div>' +
-      '</div>' +
-    '</article>';
+  /* ── rendu des idées ──────────────────────────────────── */
+  var ideasEl = $('#ideas');
+  if (ideasEl) {
+    ideasEl.innerHTML = IDEAS.map(function (group) {
+      var pills = group.items.map(function (name) {
+        return '<li class="idea">' + name + '</li>';
+      }).join('');
+      return '<div class="idea-group reveal">' +
+        '<h3>' + group.cat + '</h3>' +
+        '<ul class="idea-list">' + pills + '</ul>' +
+      '</div>';
+    }).join('');
   }
-
-  if (grid) grid.innerHTML = MODELS.map(cardHTML).join('');
-
-  /* filtres par catégorie */
-  $$('.chip').forEach(function (chip) {
-    chip.addEventListener('click', function () {
-      $$('.chip').forEach(function (c) { c.classList.remove('is-on'); });
-      chip.classList.add('is-on');
-
-      var f = chip.getAttribute('data-filter');
-      var shown = 0;
-      $$('.card', grid).forEach(function (card) {
-        var show = (f === 'tous') || (card.getAttribute('data-cat') === f);
-        card.classList.toggle('is-hidden', !show);
-        if (show) {                       // relance l'animation d'entrée
-          card.style.animation = 'none';
-          void card.offsetWidth;
-          card.style.animation = '';
-          card.style.animationDelay = (shown % 4) * 50 + 'ms';
-          shown++;
-        }
-      });
-      $('#gridEmpty').hidden = shown > 0;
-    });
-  });
 
   /* ── barème (héros + section tarifs) ──────────────────── */
   var heroTiers = $('#heroTiers');
@@ -323,29 +249,16 @@
     save();
   }
 
-  function addItem(name, g, qty, url) {
+  function addItem(name, g, qty) {
     var existing = null;
     cart.forEach(function (it) { if (it.name === name && it.g === g) existing = it; });
     if (existing) existing.qty += (qty || 1);
-    else cart.push({ name: name, g: g, qty: qty || 1, url: url || '' });
+    else cart.push({ name: name, g: g, qty: qty || 1 });
     renderCart();
   }
 
   document.addEventListener('click', function (e) {
     if (!(e.target instanceof Element)) return;
-
-    var add = e.target.closest('[data-add]');
-    if (add) {
-      var m = MODELS.filter(function (x) { return x.id === add.getAttribute('data-add'); })[0];
-      if (!m) return;
-      addItem(m.name, m.g, 1, m.url);
-      add.classList.add('done');
-      var old = add.textContent;
-      add.textContent = 'Ajouté ✓';
-      setTimeout(function () { add.classList.remove('done'); add.textContent = old; }, 1400);
-      toast(m.name + ' ajouté à votre devis');
-      return;
-    }
 
     var inc = e.target.closest('[data-inc]'), dec = e.target.closest('[data-dec]'), rm = e.target.closest('[data-rm]');
     if (inc) { cart[+inc.getAttribute('data-inc')].qty++; renderCart(); }
@@ -361,7 +274,7 @@
   if (addCustom) {
     addCustom.addEventListener('click', function () {
       var g = +wIn.value, q = +qIn.value;
-      addItem('Pièce sur mesure ≈ ' + g + ' g', g, q, '');
+      addItem('Pièce sur mesure ≈ ' + g + ' g', g, q);
       toast('Pièce de ' + g + ' g ajoutée à votre devis');
       openDrawer();
     });
@@ -395,7 +308,7 @@
     var lines = cart.map(function (it) {
       var t = lineTotal(it.g, it.qty);
       return '• ' + it.name + ' × ' + it.qty + ' (≈ ' + it.g + ' g) : ' +
-        (t === null ? 'à définir' : euro(t)) + (it.url ? '\n  ' + it.url : '');
+        (t === null ? 'à définir' : euro(t));
     });
     var tot = cartTotals();
     lines.push('Total estimé : ' + euro(tot.sum) + (tot.quote ? ' + pièces à chiffrer' : ''));
@@ -462,7 +375,7 @@
 
   /* ── apparition au défilement ─────────────────────────── */
   document.documentElement.classList.add('js');
-  $$('.sec-head, .note, .steps li, .mat, .swatches, .faq details, .calc, .contact-txt, .form, .grid-note')
+  $$('.sec-head, .note, .steps li, .mat, .swatches, .faq details, .calc, .contact-txt, .form')
     .forEach(function (el) { el.classList.add('reveal'); });
 
   var targets = $$('.reveal');

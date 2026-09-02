@@ -1,8 +1,8 @@
 # Printables — site vitrine d'impression 3D à la demande
 
-Site statique (HTML / CSS / JavaScript, sans dépendance ni build) : catalogue de
-modèles gratuits MakerWorld, grille tarifaire au poids, estimateur de prix,
-devis en ligne et demande préparée pour WhatsApp.
+Site statique (HTML / CSS / JavaScript, sans dépendance ni build) : idées
+d'objets à imprimer, grille tarifaire au poids, estimateur de prix, devis en
+ligne et demande préparée pour WhatsApp.
 
 Impression en PLA uniquement, sur **Bambu Lab A1 Combo** (volume
 256 × 256 × 256 mm, jusqu'à 4 couleurs avec l'AMS lite).
@@ -21,8 +21,8 @@ Publiable tel quel sur GitHub Pages (branche + dossier racine).
 
 Aucun serveur, aucune base de données, aucune adresse email, aucun numéro de
 téléphone publié. Les boutons « Copier ma demande » et « Copier mon message »
-composent le texte (message libre + détail du devis avec les liens MakerWorld)
-et le placent dans le presse-papiers du visiteur, qui le colle dans WhatsApp.
+composent le texte (message libre + détail du devis en cours) et le placent
+dans le presse-papiers du visiteur, qui le colle dans WhatsApp.
 
 Si le navigateur refuse la copie automatique (`navigator.clipboard` puis
 `document.execCommand` en secours), le texte s'affiche dans une zone
@@ -50,27 +50,25 @@ Règles appliquées par `priceFor()` dans `assets/js/app.js` :
 - au-delà de 200 g, aucun prix automatique : la pièce passe en devis ;
 - plusieurs exemplaires = prix unitaire × quantité, sans remise automatique.
 
-Modifier la constante `TIERS` suffit : catalogue, carte du héros, échelle de
-prix, estimateur et devis se recalculent à partir d'elle.
+Modifier la constante `TIERS` suffit : carte du héros, échelle de prix,
+estimateur et devis se recalculent à partir d'elle.
 
-## Catalogue
+## Idées d'impression
 
-Le tableau `MODELS` de `assets/js/app.js` ne contient que des modèles
-**gratuits sur MakerWorld**, chacun avec le lien vers la page de son auteur
-(affiché sur la fiche : « Voir le modèle sur MakerWorld »).
+La section « Idées » n'est pas un catalogue produit : pas de prix, pas de
+lien, pas d'image par idée — juste des noms d'objets groupés par thème, pour
+inspirer le visiteur. Le tableau `IDEAS` de `assets/js/app.js` :
 
 ```js
-{ id: 'door', name: 'Cale-porte', cat: 'maison', g: 30, glyph: '🚪',
-  url: 'https://makerworld.com/en/models/1596339-door-stopper-door-holder-door-stop',
-  desc: 'Fin, solide, imprimé d\'une pièce.' }
+{ cat: 'Maison', items: [
+  'Clips à sachet', 'Presse-tube à dentifrice', 'Crochets muraux', …
+]}
 ```
 
-`cat` accepte `maison`, `bureau`, `articule` ou `deco` — ce sont les filtres du
-catalogue. Le prix affiché découle du poids `g`, jamais saisi à la main.
-
-⚠️ Les poids sont des **estimations** (taille d'origine, PLA, remplissage 15 %),
-affichées avec un « ≈ ». Remplacez-les par les valeurs de votre trancheur au fur
-et à mesure que vous imprimez ces modèles : le prix affiché suivra tout seul.
+Pour ajouter une idée, ajoutez une chaîne dans le tableau `items` du bon
+groupe (ou créez un nouveau groupe `{ cat: '…', items: [...] }`). Le prix
+réel d'une pièce vient toujours de l'estimateur ou d'un échange direct, jamais
+de cette liste.
 
 ## Couleurs
 
@@ -80,11 +78,11 @@ listées en HTML dans `index.html`, bloc `.swatches`.
 
 ## Contenu des fichiers
 
-- `index.html` — sections : héros, catalogue, tarifs, estimateur, déroulé,
+- `index.html` — sections : héros, idées, tarifs, estimateur, déroulé,
   matière, FAQ, contact, tiroir de devis.
 - `assets/css/styles.css` — thèmes clair et sombre par variables CSS, mise en
   page responsive, animations.
-- `assets/js/app.js` — barème, catalogue, filtres, estimateur, devis persistant
+- `assets/js/app.js` — barème, idées, estimateur, devis persistant
   (`localStorage`), copie du message, thème, menu mobile.
 
 ## Détails d'implémentation
