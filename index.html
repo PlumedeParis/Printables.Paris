@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Printables — Atelier d'impression 3D</title>
-<meta name="description" content="Printables, atelier d'impression 3D : catalogue de modèles imprimés à la demande, tarifs au gramme (20 g = 3 €, 200 g = 27 €) et devis en ligne.">
+<title>Printables — Impression 3D à la demande</title>
+<meta name="description" content="Printables : impression 3D en PLA à la demande. Catalogue de modèles, prix au poids (20 g = 3 €, 200 g = 27 €), estimateur en ligne et commande par WhatsApp.">
 <meta name="theme-color" content="#E14D0B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
       <a href="#catalogue">Modèles</a>
       <a href="#tarifs">Tarifs</a>
       <a href="#estimateur">Estimateur</a>
-      <a href="#matieres">Matières</a>
+      <a href="#matiere">Le PLA</a>
       <a href="#etapes">Comment ça marche</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
@@ -53,54 +53,27 @@
   <section class="hero">
     <div class="wrap hero-in">
       <div class="hero-txt">
-        <p class="eyebrow">Atelier FDM &middot; Paris 11<sup>e</sup> &middot; buse 0,4 mm</p>
+        <p class="eyebrow">Impression 3D en PLA &middot; commande par WhatsApp</p>
         <h1>On imprime vos idées,<br><em>couche</em> après couche.</h1>
         <p class="lead">
-          Catalogue de modèles prêts à imprimer ou votre propre fichier&nbsp;: vous choisissez,
-          on lance la machine. Le prix se calcule au poids de plastique, sans surprise.
+          Choisissez un modèle du catalogue, ou envoyez-moi votre fichier.
+          Le prix se calcule sur une seule chose&nbsp;: le poids de plastique imprimé.
         </p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#catalogue">Voir les modèles</a>
           <a class="btn btn-ghost" href="#estimateur">Calculer un prix</a>
         </div>
-        <dl class="hero-stats">
-          <div><dt>Couche</dt><dd>0,20 mm</dd></div>
-          <div><dt>Délai moyen</dt><dd>3 jours</dd></div>
-          <div><dt>Dès</dt><dd>3,00 €</dd></div>
-          <div><dt>Plateau</dt><dd>256 mm</dd></div>
-        </dl>
       </div>
 
-      <div class="hero-print" aria-hidden="true">
-        <div class="printer">
-          <div class="rail"><div class="head-y"><div class="head-x"><span class="nozzle"></span></div></div></div>
-          <div class="plate">
-            <div class="object">
-              <svg viewBox="0 0 120 140" role="img" aria-hidden="true">
-                <defs>
-                  <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0" stop-color="var(--accent)"/>
-                    <stop offset="1" stop-color="var(--accent-deep)"/>
-                  </linearGradient>
-                  <pattern id="layers" width="120" height="4" patternUnits="userSpaceOnUse">
-                    <rect width="120" height="4" fill="url(#lg)"/>
-                    <rect width="120" height="1" fill="#000" opacity=".16"/>
-                  </pattern>
-                </defs>
-                <path d="M60 4c17 12 25 26 25 40 0 13-14 20-14 33 0 14 20 20 20 39 0 12-14 20-31 20s-31-8-31-20c0-19 20-25 20-39 0-13-14-20-14-33C35 30 43 16 60 4Z" fill="url(#layers)"/>
-              </svg>
-            </div>
-          </div>
-          <div class="bed-grid"></div>
-          <p class="gcode"><span id="gcodeLine">G1 Z0.20 F1200 ; couche 1</span></p>
-        </div>
-      </div>
-    </div>
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <span>PLA</span><span>&bull;</span><span>PETG</span><span>&bull;</span><span>TPU souple</span><span>&bull;</span><span>PLA Silk</span><span>&bull;</span><span>Pièces sur mesure</span><span>&bull;</span><span>Réparation</span><span>&bull;</span><span>Prototypage</span><span>&bull;</span>
-        <span>PLA</span><span>&bull;</span><span>PETG</span><span>&bull;</span><span>TPU souple</span><span>&bull;</span><span>PLA Silk</span><span>&bull;</span><span>Pièces sur mesure</span><span>&bull;</span><span>Réparation</span><span>&bull;</span><span>Prototypage</span><span>&bull;</span>
-      </div>
+      <aside class="price-card">
+        <p class="pc-h">Le tarif, en entier</p>
+        <ul class="pc-list" id="heroTiers"></ul>
+        <p class="pc-more">Au-delà de 200 g, le prix se décide ensemble.</p>
+        <a class="btn btn-wa full" href="#contact">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 5.9 2 10.7c0 2.6 1.3 4.9 3.4 6.5L4.5 22l4.7-2.4c.9.2 1.8.3 2.8.3 5.5 0 10-3.9 10-8.7S17.5 2 12 2Z"/></svg>
+          Écrire sur WhatsApp
+        </a>
+      </aside>
     </div>
   </section>
 
@@ -109,22 +82,27 @@
     <div class="wrap">
       <header class="sec-head">
         <p class="eyebrow">Catalogue</p>
-        <h2>Des modèles prêts à partir sur le plateau</h2>
-        <p class="sec-sub">Le poids indiqué est celui de la pièce imprimée en PLA, remplissage 15 %. Le prix en découle directement.</p>
+        <h2>Des classiques de l'impression 3D, imprimés pour vous</h2>
+        <p class="sec-sub">
+          Des modèles connus de la communauté (Printables, Thingiverse, MyMiniFactory),
+          imprimés à la demande en PLA dans le respect de leur licence. Les poids sont
+          donnés pour la taille habituelle, remplissage 15&nbsp;%&nbsp;: c'est ce poids qui fixe le prix.
+        </p>
       </header>
 
       <div class="filters" role="group" aria-label="Filtrer les modèles">
         <button class="chip is-on" data-filter="tous" type="button">Tous</button>
+        <button class="chip" data-filter="classique" type="button">Classiques</button>
+        <button class="chip" data-filter="articule" type="button">Articulés</button>
+        <button class="chip" data-filter="mecanisme" type="button">Mécanismes</button>
         <button class="chip" data-filter="deco" type="button">Déco</button>
-        <button class="chip" data-filter="bureau" type="button">Bureau</button>
-        <button class="chip" data-filter="gaming" type="button">Gaming</button>
-        <button class="chip" data-filter="figurine" type="button">Figurines</button>
         <button class="chip" data-filter="utile" type="button">Utile</button>
       </div>
 
       <div class="grid" id="grid"></div>
+      <p class="grid-empty" id="gridEmpty" hidden>Aucun modèle dans cette catégorie.</p>
 
-      <p class="grid-note">Vous avez votre propre fichier&nbsp;? Envoyez-nous un <code>.stl</code> ou un <code>.3mf</code> : on le pèse et on vous répond sous 24 h.</p>
+      <p class="grid-note">Un autre modèle en tête&nbsp;? Envoyez-moi le lien ou votre fichier <code>.stl</code> / <code>.3mf</code> sur WhatsApp, je vous donne le poids et le prix.</p>
     </div>
   </section>
 
@@ -134,7 +112,7 @@
       <header class="sec-head">
         <p class="eyebrow">Tarifs</p>
         <h2>Un prix au poids, affiché noir sur blanc</h2>
-        <p class="sec-sub">Matière, électricité et post-traitement de base compris. Pas de frais cachés.</p>
+        <p class="sec-sub">Le prix dépend uniquement du poids de plastique imprimé. Rien d'autre à calculer.</p>
       </header>
 
       <ol class="ladder" id="ladder"></ol>
@@ -142,8 +120,8 @@
       <div class="tarif-notes">
         <div class="note">
           <h3>Au-delà de 200 g</h3>
-          <p>Les grosses pièces demandent souvent un découpage, plus de matière et un temps machine long : on en discute ensemble et je vous fais un prix juste.</p>
-          <a class="link-arrow" href="#contact">Demander un devis</a>
+          <p>Les grosses pièces demandent beaucoup plus de matière et parfois un découpage en morceaux. On en discute et je vous fais un prix juste.</p>
+          <a class="link-arrow" href="#contact">En parler sur WhatsApp</a>
         </div>
         <div class="note">
           <h3>Entre deux paliers</h3>
@@ -151,8 +129,8 @@
           <a class="link-arrow" href="#estimateur">Tester l'estimateur</a>
         </div>
         <div class="note">
-          <h3>Quantité</h3>
-          <p>À partir de 5 exemplaires identiques, <strong>−10 %</strong> sur le lot. À partir de 20, on passe en tarif série.</p>
+          <h3>Plusieurs exemplaires</h3>
+          <p>Le prix d'une pièce se multiplie simplement par la quantité. Pour une grosse série, écrivez-moi&nbsp;: on trouvera mieux.</p>
           <a class="link-arrow" href="#contact">Parler d'une série</a>
         </div>
       </div>
@@ -165,7 +143,7 @@
       <header class="sec-head">
         <p class="eyebrow">Estimateur</p>
         <h2>Combien coûterait votre pièce&nbsp;?</h2>
-        <p class="sec-sub">Bougez le curseur : le prix, la longueur de filament et le temps machine se mettent à jour.</p>
+        <p class="sec-sub">Bougez le curseur : le prix se met à jour selon le barème ci-dessus.</p>
       </header>
 
       <div class="calc">
@@ -184,7 +162,7 @@
           <input type="range" id="qty" min="1" max="20" step="1" value="1" aria-describedby="qtyOut">
           <div class="range-ticks" aria-hidden="true"><span>1</span><span>5</span><span>10</span><span>15</span><span>20</span></div>
 
-          <p class="calc-hint" id="calcHint">Un porte-clés pèse ~12 g, un vase ~200 g.</p>
+          <p class="calc-hint" id="calcHint">Un porte-clés pèse une dizaine de grammes, un vase environ 200 g.</p>
         </div>
 
         <div class="calc-out">
@@ -192,8 +170,8 @@
           <p class="calc-price"><span id="price">12,00</span><span class="cur">€</span></p>
           <p class="calc-sub" id="priceSub">100 g en PLA &middot; 1 pièce</p>
           <ul class="calc-meta">
-            <li><span>Filament</span><b id="metaFil">33 m</b></li>
-            <li><span>Temps machine</span><b id="metaTime">8 h 20</b></li>
+            <li><span>Poids total</span><b id="metaTotal">100 g</b></li>
+            <li><span>Filament utilisé</span><b id="metaFil">34 m</b></li>
             <li><span>Prix au gramme</span><b id="metaGram">0,120 €</b></li>
           </ul>
           <button class="btn btn-primary full" id="addCustom" type="button">Ajouter cette pièce au devis</button>
@@ -213,75 +191,67 @@
         <li>
           <span class="step-n">01</span>
           <h3>Vous choisissez</h3>
-          <p>Un modèle du catalogue, ou votre fichier <code>.stl</code>. Dites-nous la couleur et la matière souhaitées.</p>
+          <p>Un modèle du catalogue, ou votre propre fichier <code>.stl</code>. Dites-moi la couleur et la quantité.</p>
         </li>
         <li>
           <span class="step-n">02</span>
-          <h3>On pèse et on valide</h3>
-          <p>Le trancheur donne le poids exact. Vous recevez le prix ferme et le délai avant qu'on lance quoi que ce soit.</p>
+          <h3>Je pèse, on valide</h3>
+          <p>Le trancheur donne le poids exact de la pièce. Vous recevez le prix ferme avant que la machine démarre.</p>
         </li>
         <li>
           <span class="step-n">03</span>
           <h3>Impression</h3>
-          <p>Couche de 0,20 mm, remplissage 15 % par défaut. Photo de la pièce sur le plateau dès la sortie.</p>
+          <p>La pièce est imprimée en PLA, dans la couleur convenue.</p>
         </li>
         <li>
           <span class="step-n">04</span>
-          <h3>Finition et remise</h3>
-          <p>Supports retirés, arêtes ébavurées. Retrait à l'atelier ou envoi Colissimo (5,90 € en France).</p>
+          <h3>Remise</h3>
+          <p>Supports retirés, arêtes ébavurées. On convient ensemble de la façon de vous remettre la pièce.</p>
         </li>
       </ol>
     </div>
   </section>
 
-  <!-- ══ MATIÈRES ══ -->
-  <section class="sec" id="matieres">
+  <!-- ══ MATIÈRE ══ -->
+  <section class="sec" id="matiere">
     <div class="wrap">
       <header class="sec-head">
-        <p class="eyebrow">Matières &amp; couleurs</p>
-        <h2>Quatre filaments, un seul tarif</h2>
-        <p class="sec-sub">Le prix ne change pas selon la matière : c'est le poids qui compte. On vous conseille selon l'usage.</p>
+        <p class="eyebrow">La matière</p>
+        <h2>Du PLA, et uniquement du PLA</h2>
+        <p class="sec-sub">Une seule matière, donc un seul tarif. Voici ce que ça implique pour votre pièce.</p>
       </header>
 
       <div class="mats">
         <article class="mat">
-          <h3>PLA</h3>
-          <p class="mat-use">Déco, figurines, prototypes</p>
-          <p>Le plus précis et le plus net. Rigide, mais il n'aime ni la voiture en plein soleil ni le lave-vaisselle.</p>
-          <ul class="specs"><li><span>Buse</span><b>210 °C</b></li><li><span>Tenue</span><b>55 °C</b></li></ul>
+          <h3>Ce qu'il fait très bien</h3>
+          <p>C'est le filament le plus précis : angles nets, détails fins, surfaces propres. Parfait pour la déco, les figurines, les pièces articulées et les prototypes.</p>
         </article>
         <article class="mat">
-          <h3>PETG</h3>
-          <p class="mat-use">Pièces techniques, extérieur</p>
-          <p>Plus souple et résistant aux chocs, supporte la chaleur et l'humidité. Idéal pour ce qui vit dehors.</p>
-          <ul class="specs"><li><span>Buse</span><b>240 °C</b></li><li><span>Tenue</span><b>80 °C</b></li></ul>
+          <h3>Ce qu'il n'aime pas</h3>
+          <p>La chaleur. Une pièce oubliée derrière un pare-brise en plein soleil peut se déformer. Il est aussi plus cassant que souple : il casse net plutôt que de plier.</p>
         </article>
         <article class="mat">
-          <h3>TPU</h3>
-          <p class="mat-use">Joints, coques, semelles</p>
-          <p>Caoutchouteux, ça plie et ça revient. Impression lente, donc réservé aux petites pièces.</p>
-          <ul class="specs"><li><span>Dureté</span><b>95 A</b></li><li><span>Vitesse</span><b>25 mm/s</b></li></ul>
+          <h3>Contact alimentaire</h3>
+          <p>À éviter. Les couches d'une impression retiennent les résidus, quel que soit le filament. Pour un pot ou un vase, on prévoit une doublure ou un verre à insérer.</p>
         </article>
         <article class="mat">
-          <h3>PLA Silk</h3>
-          <p class="mat-use">Cadeaux, vases, trophées</p>
-          <p>Fini satiné qui accroche la lumière. Magnifique sur les grandes surfaces lisses en vase mode.</p>
-          <ul class="specs"><li><span>Effet</span><b>Satiné</b></li><li><span>Couche</span><b>0,20 mm</b></li></ul>
+          <h3>Et l'écologie&nbsp;?</h3>
+          <p>Le PLA est fabriqué à partir d'amidon végétal, pas de pétrole. Il n'est pas compostable chez vous pour autant, mais les chutes se recyclent en filière spécialisée.</p>
         </article>
       </div>
 
       <div class="swatches">
-        <p class="swatch-lab">Couleurs en stock</p>
+        <p class="swatch-lab">Couleurs — dites-moi celle que vous voulez, je confirme ce que j'ai en bobine</p>
         <ul>
-          <li><i style="--c:#1A1A1A"></i>Noir mat</li>
-          <li><i style="--c:#F5F3EF"></i>Blanc os</li>
-          <li><i style="--c:#E14D0B"></i>Orange atelier</li>
-          <li><i style="--c:#0F6E78"></i>Bleu canard</li>
-          <li><i style="--c:#2E7D4F"></i>Vert sapin</li>
+          <li><i style="--c:#1A1A1A"></i>Noir</li>
+          <li><i style="--c:#F5F3EF"></i>Blanc</li>
+          <li><i style="--c:#9AA0A6"></i>Gris</li>
+          <li><i style="--c:#E14D0B"></i>Orange</li>
           <li><i style="--c:#C8102E"></i>Rouge</li>
-          <li><i style="--c:#D9B44A"></i>Or silk</li>
-          <li><i style="--c:#8E7CC3"></i>Lavande</li>
-          <li><i style="--c:#9AA0A6"></i>Gris béton</li>
+          <li><i style="--c:#0F6E78"></i>Bleu</li>
+          <li><i style="--c:#2E7D4F"></i>Vert</li>
+          <li><i style="--c:#D9B44A"></i>Or</li>
+          <li><i style="--c:#8E7CC3"></i>Violet</li>
           <li><i style="--c:linear-gradient(90deg,#E14D0B,#D9B44A,#2E7D4F)"></i>Dégradé</li>
         </ul>
       </div>
@@ -293,33 +263,33 @@
     <div class="wrap faq-wrap">
       <header class="sec-head">
         <p class="eyebrow">Questions</p>
-        <h2>Ce qu'on nous demande le plus</h2>
+        <h2>Ce qu'on me demande le plus</h2>
       </header>
 
       <div class="faq">
         <details open>
-          <summary>Comment connaissez-vous le poids avant d'imprimer&nbsp;?</summary>
-          <p>Le fichier passe dans un trancheur (PrusaSlicer) qui simule l'impression et donne le poids de filament à 1 g près. C'est cette valeur qui sert au tarif, jamais une estimation à la louche.</p>
+          <summary>Comment le prix est-il calculé&nbsp;?</summary>
+          <p>Uniquement au poids de plastique imprimé : 20 g coûtent 3 €, 100 g coûtent 12 €, 200 g coûtent 27 €. Entre deux paliers, le prix est calculé au prorata. Au-delà de 200 g, on fixe le prix ensemble.</p>
         </details>
         <details>
-          <summary>Et si la pièce rate&nbsp;?</summary>
-          <p>C'est pour nous. Un décollement, un bouchon de buse ou une couche ratée sont relancés à nos frais : vous payez la pièce, pas nos aléas machine.</p>
+          <summary>Comment connaître le poids avant d'imprimer&nbsp;?</summary>
+          <p>Le fichier passe dans un trancheur, le logiciel qui prépare l'impression : il simule la pièce et annonce le poids de filament nécessaire. C'est cette valeur qui sert au prix, jamais une estimation à la louche. Les poids du catalogue sont donnés pour la taille habituelle du modèle et peuvent varier si vous l'agrandissez.</p>
+        </details>
+        <details>
+          <summary>Puis-je faire imprimer un modèle trouvé en ligne&nbsp;?</summary>
+          <p>Oui, tant que sa licence l'autorise. La plupart des modèles Creative Commons permettent l'impression pour un usage personnel ; certains interdisent l'usage commercial. Envoyez-moi le lien, on vérifie ensemble.</p>
         </details>
         <details>
           <summary>Quelle taille maximum&nbsp;?</summary>
-          <p>256 × 256 × 256 mm en une seule pièce. Au-delà, on découpe le modèle et on colle les sections (cyanoacrylate) — comptez un supplément d'assemblage discuté à l'avance.</p>
+          <p>Donnez-moi les dimensions de la pièce et je vous dis tout de suite si elle passe en une fois. Si elle est trop grande, elle peut être découpée en plusieurs morceaux à coller.</p>
         </details>
         <details>
-          <summary>Puis-je fournir un modèle trouvé en ligne&nbsp;?</summary>
-          <p>Oui, tant que sa licence autorise l'impression à la demande. On vérifie ensemble : la plupart des modèles Creative Commons le permettent pour un usage personnel.</p>
+          <summary>Puis-je choisir la couleur&nbsp;?</summary>
+          <p>Oui. Dites-moi la couleur souhaitée dans votre message et je confirme selon les bobines disponibles.</p>
         </details>
         <details>
-          <summary>Les pièces vont-elles au contact alimentaire&nbsp;?</summary>
-          <p>Non. Les couches d'une impression FDM retiennent les bactéries. Pour un pot ou un vase, on imprime une doublure ou on vous conseille un verre à insérer.</p>
-        </details>
-        <details>
-          <summary>Quels délais&nbsp;?</summary>
-          <p>3 jours ouvrés en moyenne pour une pièce du catalogue, 5 à 7 pour du sur-mesure avec validation de fichier. Une urgence ? Dites-le, on regarde le planning des machines.</p>
+          <summary>Et pour récupérer la pièce&nbsp;?</summary>
+          <p>On en convient ensemble par message, une fois la pièce imprimée.</p>
         </details>
       </div>
     </div>
@@ -330,35 +300,25 @@
     <div class="wrap contact-in">
       <div class="contact-txt">
         <p class="eyebrow">Contact</p>
-        <h2>Parlons de votre pièce</h2>
-        <p>Décrivez votre projet, joignez un fichier si vous en avez un. On répond sous 24 h ouvrées avec un prix ferme et un délai.</p>
+        <h2>Tout se passe sur WhatsApp</h2>
+        <p>Écrivez-moi votre projet : le modèle qui vous intéresse ou votre fichier, la couleur et la quantité. Je vous réponds avec le poids exact et le prix ferme.</p>
         <ul class="contact-list">
-          <li><span>Atelier</span><b>12 rue des Bobines, 75011 Paris</b></li>
-          <li><span>Ouvert</span><b>Lun–Ven, 10 h – 19 h</b></li>
-          <li><span>Email</span><b>bonjour@printables.paris</b></li>
-          <li><span>Téléphone</span><b>01 43 00 00 00</b></li>
+          <li><span>À m'envoyer</span><b>Le modèle voulu, ou votre fichier .stl / .3mf</b></li>
+          <li><span>Précisez</span><b>La couleur et la quantité</b></li>
+          <li><span>Vous recevez</span><b>Le poids exact et le prix ferme</b></li>
         </ul>
       </div>
 
-      <form class="form" id="contactForm" novalidate>
-        <div class="row">
-          <label class="lab" for="cName">Nom<input id="cName" name="nom" type="text" required placeholder="Camille Durand"></label>
-          <label class="lab" for="cMail">Email<input id="cMail" name="email" type="email" required placeholder="camille@exemple.fr"></label>
-        </div>
-        <label class="lab" for="cSubj">Sujet
-          <select id="cSubj" name="sujet">
-            <option>Un modèle du catalogue</option>
-            <option>Mon propre fichier .stl</option>
-            <option>Une pièce de plus de 200 g</option>
-            <option>Une série (5 pièces et +)</option>
-            <option>Une réparation / pièce de rechange</option>
-          </select>
+      <form class="form" id="waForm" novalidate>
+        <label class="lab" for="waMsg">Votre message
+          <textarea id="waMsg" name="message" rows="5" placeholder="Bonjour ! Je voudrais faire imprimer le dragon articulé en noir, en 2 exemplaires."></textarea>
         </label>
-        <label class="lab" for="cMsg">Votre projet
-          <textarea id="cMsg" name="message" rows="5" required placeholder="Une pièce de rechange pour mon aspirateur, environ 40 g, en PETG noir…"></textarea>
-        </label>
-        <p class="form-note" id="formNote" role="status">Le contenu de votre devis en cours sera joint au message.</p>
-        <button class="btn btn-primary full" type="submit">Envoyer la demande</button>
+        <p class="form-note" id="formNote" role="status">Votre devis en cours sera ajouté au message.</p>
+        <button class="btn btn-wa full" type="submit">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 5.9 2 10.7c0 2.6 1.3 4.9 3.4 6.5L4.5 22l4.7-2.4c.9.2 1.8.3 2.8.3 5.5 0 10-3.9 10-8.7S17.5 2 12 2Z"/></svg>
+          Ouvrir WhatsApp avec ce message
+        </button>
+        <p class="form-hint">WhatsApp s'ouvre avec le message déjà écrit : vous n'avez plus qu'à appuyer sur envoyer. Rien ne part sans vous.</p>
       </form>
     </div>
   </section>
@@ -371,7 +331,7 @@
         <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
         <span class="brand-name">Printables<span class="brand-dot">.</span></span>
       </a>
-      <p class="foot-p">Atelier d'impression 3D à Paris. Modèles du catalogue, pièces sur mesure, réparations.</p>
+      <p class="foot-p">Impression 3D en PLA à la demande. Modèles de la communauté ou vos propres fichiers, au prix du poids imprimé.</p>
     </div>
     <nav aria-label="Pied de page">
       <p class="foot-h">Le site</p>
@@ -381,13 +341,14 @@
       <a href="#faq">FAQ</a>
     </nav>
     <div>
-      <p class="foot-h">Atelier</p>
-      <p class="foot-p">12 rue des Bobines<br>75011 Paris<br>Lun–Ven, 10 h – 19 h</p>
+      <p class="foot-h">Commander</p>
+      <p class="foot-p">Une seule adresse : WhatsApp. Envoyez votre modèle ou votre fichier, je vous réponds avec le prix.</p>
+      <a class="link-arrow" href="#contact">Écrire un message</a>
     </div>
   </div>
   <div class="wrap foot-bot">
-    <p>© <span id="year">2026</span> Printables — site de démonstration.</p>
-    <p class="mono">Buse 0,4 mm · Couche 0,20 mm · Remplissage 15 %</p>
+    <p>© <span id="year">2026</span> Printables</p>
+    <p class="mono">20 g = 3 € · 50 g = 6 € · 100 g = 12 € · 150 g = 20 € · 200 g = 27 €</p>
   </div>
 </footer>
 
@@ -401,8 +362,11 @@
   <div class="drawer-body" id="cartBody"></div>
   <footer class="drawer-foot">
     <div class="drawer-tot"><span>Total estimé</span><b id="cartTotal">0,00 €</b></div>
-    <p class="drawer-note" id="cartNote">Estimation hors livraison. Le prix est confirmé après passage au trancheur.</p>
-    <button class="btn btn-primary full" id="sendQuote" type="button">Envoyer ma demande</button>
+    <p class="drawer-note" id="cartNote">Estimation d'après les poids du catalogue. Le prix est confirmé après passage au trancheur.</p>
+    <button class="btn btn-wa full" id="sendQuote" type="button">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 5.9 2 10.7c0 2.6 1.3 4.9 3.4 6.5L4.5 22l4.7-2.4c.9.2 1.8.3 2.8.3 5.5 0 10-3.9 10-8.7S17.5 2 12 2Z"/></svg>
+      Envoyer sur WhatsApp
+    </button>
   </footer>
 </aside>
 
