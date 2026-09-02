@@ -63,9 +63,11 @@ Sur le nombre total de pièces du panier (tous modèles confondus), dans
 
 | Pièces  | Remise |
 | ------- | ------ |
-| 3       | −10 %  |
-| 6       | −20 %  |
-| 10      | −30 %  |
+| 2       | −10 %  |
+| 4       | −20 %  |
+| 6       | −30 %  |
+| 10      | −40 %  |
+| 16      | −50 %  |
 
 `bulkDiscount(qty)` renvoie le meilleur palier atteint. Elle s'applique :
 
@@ -102,7 +104,7 @@ prix réel vient toujours de l'estimateur ou d'un échange direct.
 ## Couleurs
 
 Les bobines annoncées sur le site (section « Le PLA ») : noir, blanc, gris,
-vert, orange, bleu, bleu clair, jaune, transparent, rouge métallisé. Elles sont
+vert, orange, bleu clair, jaune, bleu transparent, rouge, titane. Elles sont
 listées en HTML dans `index.html`, bloc `.swatches`.
 
 ## Contenu des fichiers

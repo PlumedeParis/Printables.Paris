@@ -428,9 +428,14 @@ input[type=range]:active::-webkit-slider-thumb{ transform: scale(1.15); }
   border:1px solid var(--line-firm); transition: transform .2s ease;
 }
 .swatches li:hover i{ transform: scale(1.18); }
-.sw-clear{
+.swatches i.sw-clear{
   background:
     linear-gradient(135deg, rgba(255,255,255,.85), rgba(255,255,255,.15)),
+    repeating-conic-gradient(var(--line) 0% 25%, var(--surface) 0% 50%) 0 0 / 8px 8px;
+}
+.swatches i.sw-clear-blue{
+  background:
+    linear-gradient(135deg, rgba(27,79,160,.55), rgba(95,182,232,.2)),
     repeating-conic-gradient(var(--line) 0% 25%, var(--surface) 0% 50%) 0 0 / 8px 8px;
 }
 .swatch-note{ margin-top:1rem; font-size:.86rem; color: var(--muted); }

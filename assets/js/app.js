@@ -39,9 +39,10 @@
 
   /* ── remise quantité ──────────────────────────────────────
      Sur le nombre total de pièces (du panier, ou de l'aperçu de
-     l'estimateur) : 3 pièces = -10 %, 6 pièces = -20 %,
-     10 pièces = -30 %. On prend le meilleur palier atteint.     */
-  var BULK_TIERS = [[10, 0.30], [6, 0.20], [3, 0.10]];
+     l'estimateur) : 2 pièces = -10 %, 4 pièces = -20 %,
+     6 pièces = -30 %, 10 pièces = -40 %, 16 pièces = -50 %.
+     On prend le meilleur palier atteint.                        */
+  var BULK_TIERS = [[16, 0.50], [10, 0.40], [6, 0.30], [4, 0.20], [2, 0.10]];
 
   function bulkDiscount(qty) {
     for (var i = 0; i < BULK_TIERS.length; i++) {
