@@ -37,18 +37,34 @@
 
   function euro(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
 
-  /* ── remise quantité ──────────────────────────────────────
-     Sur le nombre total de pièces (du panier, ou de l'aperçu de
-     l'estimateur) : 2 pièces = -10 %, 4 pièces = -20 %,
-     6 pièces = -30 %, 10 pièces = -40 %, 16 pièces = -50 %.
-     On prend le meilleur palier atteint.                        */
-  var BULK_TIERS = [[16, 0.50], [10, 0.40], [6, 0.30], [4, 0.20], [2, 0.10]];
+  /* ── remise sur le montant ─────────────────────────────────
+     La technique la plus simple et la plus lisible : un palier de
+     remise dès que le panier (ou la pièce en cours de réglage dans
+     l'estimateur) atteint un certain montant. Pas de comptage de
+     pièces, pas de condition sur les articles : juste le total.
+     20 € = -10 %, 40 € = -20 %, 60 € = -30 %, 100 € = -40 %,
+     150 € = -50 %.                                                */
+  var BULK_TIERS = [[150, 0.50], [100, 0.40], [60, 0.30], [40, 0.20], [20, 0.10]];
 
-  function bulkDiscount(qty) {
+  function bulkTierFor(amount) {
     for (var i = 0; i < BULK_TIERS.length; i++) {
-      if (qty >= BULK_TIERS[i][0]) return BULK_TIERS[i][1];
+      if (amount >= BULK_TIERS[i][0]) return BULK_TIERS[i];
     }
-    return 0;
+    return null;
+  }
+
+  function bulkDiscount(amount) {
+    var t = bulkTierFor(amount);
+    return t ? t[1] : 0;
+  }
+
+  /* le prochain palier non encore atteint, ou null si on est déjà au max */
+  function nextBulkTier(amount) {
+    var asc = BULK_TIERS.slice().sort(function (a, b) { return a[0] - b[0]; });
+    for (var i = 0; i < asc.length; i++) {
+      if (amount < asc[i][0]) return asc[i];
+    }
+    return null;
   }
 
   function lineTotal(g, qty) {
@@ -156,7 +172,7 @@
   var bulkTiersEl = $('#bulkTiers');
   if (bulkTiersEl) {
     bulkTiersEl.innerHTML = BULK_TIERS.slice().reverse().map(function (t) {
-      return '<li><span>' + t[0] + ' pièces</span><b>−' + Math.round(t[1] * 100) + ' %</b></li>';
+      return '<li><span>Dès ' + t[0] + ' €</span><b>−' + Math.round(t[1] * 100) + ' %</b></li>';
     }).join('');
   }
 
@@ -178,7 +194,7 @@
 
     var priceEl = $('#price');
     var raw = lineTotal(g, q);
-    var discount = bulkDiscount(q);
+    var discount = bulkDiscount(raw);
     var total = Math.round(raw * (1 - discount) * 100) / 100;
 
     priceEl.textContent = total.toFixed(2).replace('.', ',');
@@ -188,9 +204,17 @@
     var discBadge = $('#calcDiscount');
     if (discount > 0) {
       discBadge.hidden = false;
-      discBadge.textContent = 'Remise incluse : −' + Math.round(discount * 100) + ' % (' + q + ' pièces identiques)';
+      discBadge.classList.remove('pending');
+      discBadge.textContent = 'Remise incluse : −' + Math.round(discount * 100) + ' %';
     } else {
-      discBadge.hidden = true;
+      var next = nextBulkTier(raw);
+      if (next) {
+        discBadge.hidden = false;
+        discBadge.classList.add('pending');
+        discBadge.textContent = 'Encore ' + euro(next[0] - raw) + ' pour −' + Math.round(next[1] * 100) + ' % de remise';
+      } else {
+        discBadge.hidden = true;
+      }
     }
 
     var tg = g * q;
@@ -221,6 +245,28 @@
     toastT = setTimeout(function () { toastEl.classList.remove('on'); }, 3200);
   }
 
+  /* montre la promotion qui s'applique (ou celle qu'on approche)
+     juste au moment où on choisit une pièce, pas seulement une fois
+     le panier ouvert.                                              */
+  function discountToast(label, verb) {
+    verb = verb || 'ajouté';
+    var tot = cartTotals();
+    if (tot.raw <= 0) {
+      toast('« ' + label + ' » ' + verb + ' à votre panier');
+      return;
+    }
+    if (tot.discount > 0) {
+      toast('« ' + label + ' » ' + verb + ' — remise −' + Math.round(tot.discount * 100) + ' % active (' + euro(tot.raw) + ')');
+      return;
+    }
+    var next = nextBulkTier(tot.raw);
+    if (next) {
+      toast('« ' + label + ' » ' + verb + ' — encore ' + euro(next[0] - tot.raw) + ' pour −' + Math.round(next[1] * 100) + ' %');
+    } else {
+      toast('« ' + label + ' » ' + verb + ' à votre panier');
+    }
+  }
+
   /* ── panier ───────────────────────────────────────────── */
   var KEY = 'printables.panier.v1';
   var cart = [];
@@ -231,16 +277,15 @@
   }
 
   function cartTotals() {
-    var raw = 0, quote = false, qty = 0;
+    var raw = 0, quote = false;
     cart.forEach(function (it) {
-      qty += it.qty;
       var t = lineTotal(it.g, it.qty);
       if (t === null) quote = true; else raw += t;
     });
     raw = Math.round(raw * 100) / 100;
-    var discount = bulkDiscount(qty);
+    var discount = bulkDiscount(raw);
     var sum = Math.round(raw * (1 - discount) * 100) / 100;
-    return { raw: raw, sum: sum, discount: discount, qty: qty, quote: quote };
+    return { raw: raw, sum: sum, discount: discount, quote: quote };
   }
 
   function renderCart() {
@@ -274,15 +319,20 @@
 
     var rowsHtml = '';
     if (tot.discount > 0 && tot.raw > 0) {
-      rowsHtml += '<div class="drawer-row"><span>Sous-total (' + tot.qty + (tot.qty > 1 ? ' pièces' : ' pièce') + ')</span><b>' + euro(tot.raw) + '</b></div>';
+      rowsHtml += '<div class="drawer-row"><span>Sous-total</span><b>' + euro(tot.raw) + '</b></div>';
       rowsHtml += '<div class="drawer-row discount"><span>Remise −' + Math.round(tot.discount * 100) + ' %</span><b>−' + euro(Math.round((tot.raw - tot.sum) * 100) / 100) + '</b></div>';
     }
     $('#cartRows').innerHTML = rowsHtml;
 
     $('#cartTotal').textContent = tot.sum > 0 ? euro(tot.sum) : (tot.quote ? 'À définir' : euro(0));
-    $('#cartNote').textContent = tot.quote
+    var cartNote = tot.quote
       ? 'Le poids de certaines pièces reste à définir : leur prix sera fixé avec vous avant l\'impression.'
       : 'Estimation d\'après les poids indiqués. Le prix est confirmé après passage au trancheur.';
+    var nextTier = nextBulkTier(tot.raw);
+    if (tot.raw > 0 && nextTier) {
+      cartNote += ' Encore ' + euro(nextTier[0] - tot.raw) + ' pour −' + Math.round(nextTier[1] * 100) + ' % de remise.';
+    }
+    $('#cartNote').textContent = cartNote;
 
     var note = $('#formNote');
     if (note) {
@@ -312,7 +362,7 @@
       var old = idea.textContent;
       idea.textContent = 'Ajouté ✓';
       setTimeout(function () { idea.classList.remove('done'); idea.textContent = old; }, 1300);
-      toast('« ' + name + ' » ajouté à votre panier');
+      discountToast(name);
       return;
     }
 
@@ -331,7 +381,7 @@
     addCustom.addEventListener('click', function () {
       var g = +wIn.value, q = +qIn.value;
       addItem('Pièce sur mesure ≈ ' + g + ' g', g, q);
-      toast('Pièce de ' + g + ' g ajoutée à votre panier');
+      discountToast('Pièce de ' + g + ' g', 'ajoutée');
       openDrawer();
     });
   }
@@ -369,7 +419,7 @@
     });
     var tot = cartTotals();
     if (tot.discount > 0 && tot.raw > 0) {
-      lines.push('Sous-total (' + tot.qty + (tot.qty > 1 ? ' pièces' : ' pièce') + ') : ' + euro(tot.raw));
+      lines.push('Sous-total : ' + euro(tot.raw));
       lines.push('Remise −' + Math.round(tot.discount * 100) + ' % : −' + euro(Math.round((tot.raw - tot.sum) * 100) / 100));
     }
     var totalLine = tot.sum > 0
