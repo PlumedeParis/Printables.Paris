@@ -51,11 +51,36 @@ Règles appliquées par `priceFor()` dans `assets/js/app.js` :
   (150 g → 200 g, soit 0,14 €/g) — c'est une estimation, affichée avec la
   mention « estimation » ; le prix ferme d'une grosse pièce se confirme
   avant impression ;
-- plusieurs exemplaires = prix unitaire × quantité, sans remise automatique ;
 - seules les idées ajoutées au panier sans poids connu restent « à définir ».
 
 Modifier la constante `TIERS` suffit : carte du héros, échelle de prix,
 estimateur et panier se recalculent à partir d'elle.
+
+## Remise quantité
+
+Sur le nombre total de pièces du panier (tous modèles confondus), dans
+`BULK_TIERS` (`assets/js/app.js`) :
+
+| Pièces  | Remise |
+| ------- | ------ |
+| 3       | −10 %  |
+| 6       | −20 %  |
+| 10      | −30 %  |
+
+`bulkDiscount(qty)` renvoie le meilleur palier atteint. Elle s'applique :
+
+- au panier : `cartTotals()` additionne le prix brut de chaque ligne
+  (`raw`), calcule la remise sur la quantité totale, et renvoie le prix
+  remisé (`sum`) ; le tiroir affiche le détail (sous-total, remise, total)
+  dès qu'une remise s'applique, et le message copié pour WhatsApp reprend
+  le même détail ;
+- à l'estimateur, comme aperçu : la remise y est calculée sur la seule
+  quantité de la pièce en cours de réglage (badge « Remise incluse »),
+  avant même l'ajout au panier — une fois ajoutée, le panier recalcule la
+  remise sur le total réel de la commande, qui peut différer si d'autres
+  pièces s'y trouvent déjà.
+
+Modifier `BULK_TIERS` (paliers ou taux) suffit à ajuster la remise partout.
 
 ## Idées d'impression
 

@@ -37,6 +37,19 @@
 
   function euro(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
 
+  /* ── remise quantité ──────────────────────────────────────
+     Sur le nombre total de pièces (du panier, ou de l'aperçu de
+     l'estimateur) : 3 pièces = -10 %, 6 pièces = -20 %,
+     10 pièces = -30 %. On prend le meilleur palier atteint.     */
+  var BULK_TIERS = [[10, 0.30], [6, 0.20], [3, 0.10]];
+
+  function bulkDiscount(qty) {
+    for (var i = 0; i < BULK_TIERS.length; i++) {
+      if (qty >= BULK_TIERS[i][0]) return BULK_TIERS[i][1];
+    }
+    return 0;
+  }
+
   function lineTotal(g, qty) {
     var u = priceFor(g);
     return u === null ? null : Math.round(u * qty * 100) / 100;
@@ -135,8 +148,15 @@
     }).join('');
     rows += '<li class="more reveal"><span class="w">200 g +</span>' +
       '<span class="bar"><i style="--w:100%;animation-delay:450ms"></i></span>' +
-      '<span class="p">À voir ensemble</span></li>';
+      '<span class="p">Estimation</span></li>';
     ladder.innerHTML = rows;
+  }
+
+  var bulkTiersEl = $('#bulkTiers');
+  if (bulkTiersEl) {
+    bulkTiersEl.innerHTML = BULK_TIERS.slice().reverse().map(function (t) {
+      return '<li><span>' + t[0] + ' pièces</span><b>−' + Math.round(t[1] * 100) + ' %</b></li>';
+    }).join('');
   }
 
   /* ── estimateur ───────────────────────────────────────── */
@@ -156,11 +176,21 @@
     $('#qtyOut').textContent = q + (q > 1 ? ' pièces' : ' pièce');
 
     var priceEl = $('#price');
-    var total = lineTotal(g, q);
+    var raw = lineTotal(g, q);
+    var discount = bulkDiscount(q);
+    var total = Math.round(raw * (1 - discount) * 100) / 100;
 
     priceEl.textContent = total.toFixed(2).replace('.', ',');
     $('#priceSub').textContent = g + ' g en PLA · ' + q + (q > 1 ? ' pièces' : ' pièce') +
       (g > MAX_G ? ' · estimation' : '');
+
+    var discBadge = $('#calcDiscount');
+    if (discount > 0) {
+      discBadge.hidden = false;
+      discBadge.textContent = 'Remise incluse : −' + Math.round(discount * 100) + ' % (' + q + ' pièces identiques)';
+    } else {
+      discBadge.hidden = true;
+    }
 
     var tg = g * q;
     $('#metaTotal').textContent = tg + ' g';
@@ -200,12 +230,16 @@
   }
 
   function cartTotals() {
-    var sum = 0, quote = false;
+    var raw = 0, quote = false, qty = 0;
     cart.forEach(function (it) {
+      qty += it.qty;
       var t = lineTotal(it.g, it.qty);
-      if (t === null) quote = true; else sum += t;
+      if (t === null) quote = true; else raw += t;
     });
-    return { sum: Math.round(sum * 100) / 100, quote: quote };
+    raw = Math.round(raw * 100) / 100;
+    var discount = bulkDiscount(qty);
+    var sum = Math.round(raw * (1 - discount) * 100) / 100;
+    return { raw: raw, sum: sum, discount: discount, qty: qty, quote: quote };
   }
 
   function renderCart() {
@@ -236,6 +270,14 @@
     }
 
     var tot = cartTotals();
+
+    var rowsHtml = '';
+    if (tot.discount > 0 && tot.raw > 0) {
+      rowsHtml += '<div class="drawer-row"><span>Sous-total (' + tot.qty + (tot.qty > 1 ? ' pièces' : ' pièce') + ')</span><b>' + euro(tot.raw) + '</b></div>';
+      rowsHtml += '<div class="drawer-row discount"><span>Remise −' + Math.round(tot.discount * 100) + ' %</span><b>−' + euro(Math.round((tot.raw - tot.sum) * 100) / 100) + '</b></div>';
+    }
+    $('#cartRows').innerHTML = rowsHtml;
+
     $('#cartTotal').textContent = tot.sum > 0 ? euro(tot.sum) : (tot.quote ? 'À définir' : euro(0));
     $('#cartNote').textContent = tot.quote
       ? 'Le poids de certaines pièces reste à définir : leur prix sera fixé avec vous avant l\'impression.'
@@ -325,6 +367,10 @@
         (t === null ? 'à définir' : euro(t));
     });
     var tot = cartTotals();
+    if (tot.discount > 0 && tot.raw > 0) {
+      lines.push('Sous-total (' + tot.qty + (tot.qty > 1 ? ' pièces' : ' pièce') + ') : ' + euro(tot.raw));
+      lines.push('Remise −' + Math.round(tot.discount * 100) + ' % : −' + euro(Math.round((tot.raw - tot.sum) * 100) / 100));
+    }
     var totalLine = tot.sum > 0
       ? 'Total estimé : ' + euro(tot.sum) + (tot.quote ? ' + pièces à chiffrer' : '')
       : (tot.quote ? 'Total : à chiffrer ensemble' : 'Total estimé : ' + euro(tot.sum));

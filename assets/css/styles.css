@@ -224,6 +224,17 @@ code{ font-family: var(--mono); font-size: .88em; background: var(--surface-2); 
 .lead{ margin-top:1.15rem; font-size: clamp(1rem,1.6vw,1.12rem); color: var(--ink-soft); max-width: 46ch; }
 .hero-cta{ display:flex; flex-wrap:wrap; gap:.7rem; margin-top: 1.7rem; }
 
+.hero-steps{
+  list-style:none; margin: 2.2rem 0 0; padding-top: 1.3rem; border-top:1px solid var(--line);
+  display:grid; gap:.55rem; max-width: 40ch;
+}
+.hero-steps li{ display:flex; gap:.7rem; font-size:.9rem; color: var(--ink-soft); }
+.hero-steps b{
+  flex:0 0 auto; width:1.4rem; height:1.4rem; display:grid; place-items:center;
+  font-family: var(--mono); font-size:.76rem; font-weight:600; color: var(--accent);
+  border:1px solid var(--accent); border-radius:50%;
+}
+
 /* carte tarif du héros */
 .price-card{
   background: var(--surface); border:1px solid var(--line); border-radius:6px;
@@ -302,6 +313,17 @@ code{ font-family: var(--mono); font-size: .88em; background: var(--surface-2); 
 .ladder li.more .p{ font-size:.92rem; color: var(--teal); }
 .ladder li.more .bar i{ background: repeating-linear-gradient(90deg, var(--teal) 0 3px, transparent 3px 8px); }
 
+.bulk-box{
+  margin-top: 1.8rem; padding: 1.3rem 1.5rem; border-radius:6px;
+  border:1px solid var(--accent); background: var(--accent-soft);
+}
+.bulk-lab{ font-family: var(--display); font-weight:700; font-size:1.05rem; letter-spacing:-.01em; margin-bottom:1rem; }
+.bulk-list{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.7rem 2rem; }
+.bulk-list li{ display:flex; align-items:baseline; gap:.5rem; }
+.bulk-list span{ font-family: var(--mono); font-size:.9rem; color: var(--ink-soft); }
+.bulk-list b{ font-family: var(--mono); font-size:1.2rem; font-weight:700; color: var(--accent); }
+.bulk-note{ margin-top:.9rem; font-size:.82rem; color: var(--ink-soft); }
+
 .tarif-notes{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:1.5rem; margin-top:2.6rem; }
 .note h3{ margin-bottom:.5rem; }
 .note p{ color: var(--ink-soft); font-size:.94rem; }
@@ -361,6 +383,11 @@ input[type=range]:active::-webkit-slider-thumb{ transform: scale(1.15); }
 }
 .calc-price .cur{ font-size:.42em; margin-left:.12em; color: var(--accent); }
 .calc-sub{ font-family: var(--mono); font-size:.82rem; opacity:.7; margin-top:.5rem; }
+.calc-badge{
+  display:inline-block; margin-top:.7rem; font-size:.78rem; font-weight:600;
+  color:#fff; background: var(--accent); padding:.3rem .6rem; border-radius:99px;
+  width: fit-content;
+}
 .calc-meta{ list-style:none; margin:1.3rem 0 1.5rem; padding:0; display:grid; gap:.1rem; }
 .calc-meta li{
   display:flex; justify-content:space-between; gap:1rem; padding:.5rem 0;
@@ -490,6 +517,11 @@ input[type=range]:active::-webkit-slider-thumb{ transform: scale(1.15); }
 .cart-rm:hover{ color:#C8102E; }
 .cart-empty{ color: var(--muted); font-size:.92rem; }
 .drawer-foot{ padding:1.1rem 1.2rem; border-top:1px solid var(--line); background: var(--surface-2); display:grid; gap:.7rem; }
+.drawer-rows{ display:grid; gap:.35rem; }
+.drawer-rows:empty{ display:none; }
+.drawer-row{ display:flex; justify-content:space-between; font-size:.83rem; color: var(--muted); }
+.drawer-row b{ font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.drawer-row.discount b{ color: var(--ok); }
 .drawer-tot{ display:flex; justify-content:space-between; align-items:baseline; }
 .drawer-tot span{ font-family: var(--mono); font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color: var(--muted); }
 .drawer-tot b{ font-family: var(--display); font-size:1.7rem; font-variant-numeric: tabular-nums; }

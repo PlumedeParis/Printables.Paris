@@ -27,8 +27,8 @@
       <a href="#catalogue">Idées</a>
       <a href="#tarifs">Tarifs</a>
       <a href="#estimateur">Estimateur</a>
-      <a href="#matiere">Le PLA</a>
       <a href="#etapes">Comment ça marche</a>
+      <a href="#matiere">Le PLA</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -63,12 +63,18 @@
           <a class="btn btn-primary" href="#catalogue">Des idées d'impression</a>
           <a class="btn btn-ghost" href="#estimateur">Calculer un prix</a>
         </div>
+
+        <ol class="hero-steps">
+          <li><b>1</b> Choisissez une idée, ou décrivez la vôtre</li>
+          <li><b>2</b> Le prix se calcule au poids, remises incluses</li>
+          <li><b>3</b> Vous validez la commande sur WhatsApp</li>
+        </ol>
       </div>
 
       <aside class="price-card">
         <p class="pc-h">Le tarif, en entier</p>
         <ul class="pc-list" id="heroTiers"></ul>
-        <p class="pc-more">Au-delà de 200 g, le prix se décide ensemble.</p>
+        <p class="pc-more">Au-delà de 200 g, l'estimateur donne un prix indicatif, confirmé ensemble. Et plus vous imprimez, moins c'est cher pièce par pièce&nbsp;: <a href="#tarifs">voir les remises</a>.</p>
         <a class="btn btn-wa full" href="#contact">
           <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 5.9 2 10.7c0 2.6 1.3 4.9 3.4 6.5L4.5 22l4.7-2.4c.9.2 1.8.3 2.8.3 5.5 0 10-3.9 10-8.7S17.5 2 12 2Z"/></svg>
           Faire une demande
@@ -106,21 +112,22 @@
 
       <ol class="ladder" id="ladder"></ol>
 
+      <div class="bulk-box">
+        <p class="bulk-lab">Plus vous commandez de pièces, moins elles coûtent cher</p>
+        <ul class="bulk-list" id="bulkTiers"></ul>
+        <p class="bulk-note">Remise calculée automatiquement sur le nombre total de pièces de votre panier, tous modèles confondus.</p>
+      </div>
+
       <div class="tarif-notes">
         <div class="note">
           <h3>Au-delà de 200 g</h3>
-          <p>Les grosses pièces demandent beaucoup plus de matière et parfois un découpage en morceaux. On en discute et je vous fais un prix juste.</p>
-          <a class="link-arrow" href="#contact">En parler sur WhatsApp</a>
+          <p>Les grosses pièces demandent beaucoup plus de matière et parfois un découpage en morceaux. L'estimateur donne un prix indicatif&nbsp;; on le confirme ensemble avant impression.</p>
+          <a class="link-arrow" href="#estimateur">Tester l'estimateur</a>
         </div>
         <div class="note">
           <h3>Entre deux paliers</h3>
           <p>Le prix est calculé au prorata entre les paliers. Un modèle de 75 g tombe pile entre 50 g et 100 g&nbsp;: <strong>9,00 €</strong>.</p>
           <a class="link-arrow" href="#estimateur">Tester l'estimateur</a>
-        </div>
-        <div class="note">
-          <h3>Plusieurs exemplaires</h3>
-          <p>Le prix d'une pièce se multiplie simplement par la quantité. Pour une grosse série, écrivez-moi&nbsp;: on trouvera mieux.</p>
-          <a class="link-arrow" href="#contact">Parler d'une série</a>
         </div>
       </div>
     </div>
@@ -158,6 +165,7 @@
           <p class="calc-lab">Estimation</p>
           <p class="calc-price"><span id="price">12,00</span><span class="cur">€</span></p>
           <p class="calc-sub" id="priceSub">100 g en PLA &middot; 1 pièce</p>
+          <p class="calc-badge" id="calcDiscount" hidden></p>
           <ul class="calc-meta">
             <li><span>Poids total</span><b id="metaTotal">100 g</b></li>
             <li><span>Filament utilisé</span><b id="metaFil">34 m</b></li>
@@ -360,8 +368,9 @@
   </header>
   <div class="drawer-body" id="cartBody"></div>
   <footer class="drawer-foot">
-    <div class="drawer-tot"><span>Total estimé</span><b id="cartTotal">0,00 €</b></div>
-    <p class="drawer-note" id="cartNote">Estimation d'après les poids du catalogue. Le prix est confirmé après passage au trancheur.</p>
+    <div class="drawer-rows" id="cartRows"></div>
+    <div class="drawer-tot"><span>Total</span><b id="cartTotal">0,00 €</b></div>
+    <p class="drawer-note" id="cartNote">Estimation d'après les poids indiqués. Le prix est confirmé après passage au trancheur.</p>
     <button class="btn btn-wa full" id="sendQuote" type="button">
       <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
       Copier ma demande
