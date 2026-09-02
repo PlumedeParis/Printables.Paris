@@ -10,15 +10,16 @@
 
   /* Tarif : 20 g = 3 €, 50 g = 6 €, 100 g = 12 €, 150 g = 20 €,
      200 g = 27 €. Entre deux paliers, prix au prorata.
-     Au-delà de 200 g : prix fixé de la main à la main.          */
+     Au-delà de 200 g : le prix continue au même taux que le
+     dernier palier (150→200 g) — c'est une estimation, le prix
+     ferme d'une grosse pièce se confirme avant impression.      */
   var TIERS = [[20, 3], [50, 6], [100, 12], [150, 20], [200, 27]];
-  var MAX_G = 200;      // au-delà : sur devis
+  var MAX_G = TIERS[TIERS.length - 1][0];  // au-delà : estimation extrapolée
   var M_PER_G = 0.335;  // 1 g de PLA ≈ 33,5 cm de filament 1,75 mm
 
   /* ── prix ─────────────────────────────────────────────── */
   function priceFor(g) {
     if (!g || g <= 0) return null;
-    if (g > MAX_G) return null;
     if (g <= TIERS[0][0]) return TIERS[0][1];         // tarif minimum
     for (var i = 1; i < TIERS.length; i++) {
       var a = TIERS[i - 1], b = TIERS[i];
@@ -27,7 +28,11 @@
         return Math.round(p * 2) / 2;                 // arrondi aux 50 centimes
       }
     }
-    return null;
+    // extrapolation au-delà du dernier palier, au taux du dernier segment
+    var last = TIERS[TIERS.length - 1], prev = TIERS[TIERS.length - 2];
+    var rate = (last[1] - prev[1]) / (last[0] - prev[0]);
+    var p2 = last[1] + (g - last[0]) * rate;
+    return Math.round(p2 * 2) / 2;
   }
 
   function euro(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
@@ -150,30 +155,22 @@
     $('#weightOut').textContent = g + ' g';
     $('#qtyOut').textContent = q + (q > 1 ? ' pièces' : ' pièce');
 
-    var priceEl = $('#price'), box = $('.calc-price');
+    var priceEl = $('#price');
     var total = lineTotal(g, q);
 
-    if (total === null) {
-      box.classList.add('is-quote');
-      priceEl.textContent = 'Sur devis';
-      $('.cur').style.display = 'none';
-      $('#priceSub').textContent = g + ' g : au-delà de 200 g, on en parle ensemble';
-    } else {
-      box.classList.remove('is-quote');
-      $('.cur').style.display = '';
-      priceEl.textContent = total.toFixed(2).replace('.', ',');
-      $('#priceSub').textContent = g + ' g en PLA · ' + q + (q > 1 ? ' pièces' : ' pièce');
-    }
+    priceEl.textContent = total.toFixed(2).replace('.', ',');
+    $('#priceSub').textContent = g + ' g en PLA · ' + q + (q > 1 ? ' pièces' : ' pièce') +
+      (g > MAX_G ? ' · estimation' : '');
 
     var tg = g * q;
     $('#metaTotal').textContent = tg + ' g';
     $('#metaFil').textContent = Math.round(tg * M_PER_G) + ' m';
     var unit = priceFor(g);
-    $('#metaGram').textContent = unit === null ? '—' : (unit / g).toFixed(3).replace('.', ',') + ' €';
+    $('#metaGram').textContent = (unit / g).toFixed(3).replace('.', ',') + ' €';
 
     var hint = 'Un porte-clés pèse une dizaine de grammes, un vase environ 200 g.';
     if (g <= 20) hint = 'Sous 20 g, le tarif minimum s\'applique : 3,00 €.';
-    else if (g > MAX_G) hint = 'Au-delà de 200 g, écrivez-moi : on fixe le prix ensemble.';
+    else if (g > MAX_G) hint = 'Au-delà de 200 g, ce prix est une estimation au même tarif : on le confirme ensemble avant impression (matière, découpe éventuelle).';
     $('#calcHint').textContent = hint;
   }
 

@@ -360,7 +360,6 @@ input[type=range]:active::-webkit-slider-thumb{ transform: scale(1.15); }
   font-variant-numeric: tabular-nums; color: var(--surface);
 }
 .calc-price .cur{ font-size:.42em; margin-left:.12em; color: var(--accent); }
-.calc-price.is-quote{ font-size: clamp(1.5rem,4vw,2rem); }
 .calc-sub{ font-family: var(--mono); font-size:.82rem; opacity:.7; margin-top:.5rem; }
 .calc-meta{ list-style:none; margin:1.3rem 0 1.5rem; padding:0; display:grid; gap:.1rem; }
 .calc-meta li{

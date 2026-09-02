@@ -40,15 +40,19 @@ sécurité (CSP) de certains hébergeurs de prévisualisation, d'où la copie.
 | 100 g         | 12,00 € |
 | 150 g         | 20,00 € |
 | 200 g         | 27,00 € |
-| plus de 200 g | à définir |
+| plus de 200 g | estimation au même taux, à confirmer |
 
 Règles appliquées par `priceFor()` dans `assets/js/app.js` :
 
 - en dessous de 20 g, le tarif minimum de 3,00 € s'applique ;
 - entre deux paliers, prix interpolé puis arrondi aux 50 centimes
   (75 g → 9,00 €, 45 g → 5,50 €) ;
-- au-delà de 200 g, aucun prix automatique : la pièce passe en « à définir » ;
-- plusieurs exemplaires = prix unitaire × quantité, sans remise automatique.
+- au-delà de 200 g, le prix continue au même taux que le dernier palier
+  (150 g → 200 g, soit 0,14 €/g) — c'est une estimation, affichée avec la
+  mention « estimation » ; le prix ferme d'une grosse pièce se confirme
+  avant impression ;
+- plusieurs exemplaires = prix unitaire × quantité, sans remise automatique ;
+- seules les idées ajoutées au panier sans poids connu restent « à définir ».
 
 Modifier la constante `TIERS` suffit : carte du héros, échelle de prix,
 estimateur et panier se recalculent à partir d'elle.
