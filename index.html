@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Printables — Atelier d'impression 3D</title>
+<meta name="description" content="Printables, atelier d'impression 3D : catalogue de modèles imprimés à la demande, tarifs au gramme (20 g = 3 €, 200 g = 27 €) et devis en ligne.">
+<meta name="theme-color" content="#E14D0B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23E14D0B'/><rect x='24' y='20' width='52' height='12' fill='%23fff'/><rect x='24' y='40' width='52' height='12' fill='%23fff'/><rect x='24' y='60' width='52' height='12' fill='%23fff' opacity='.55'/></svg>">
+</head>
+<body>
+
+<a class="skip" href="#catalogue">Aller au catalogue</a>
+
+<header class="site-head" id="top">
+  <div class="wrap head-in">
+    <a class="brand" href="#top" aria-label="Printables, accueil">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="brand-name">Printables<span class="brand-dot">.</span></span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Navigation principale">
+      <a href="#catalogue">Modèles</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#estimateur">Estimateur</a>
+      <a href="#matieres">Matières</a>
+      <a href="#etapes">Comment ça marche</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="head-actions">
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Changer de thème" title="Changer de thème">
+        <span class="ico-sun" aria-hidden="true"></span>
+      </button>
+      <button class="btn btn-quote" id="openCart" type="button" aria-haspopup="dialog">
+        Mon devis <span class="pill" id="cartCount">0</span>
+      </button>
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div class="hero-txt">
+        <p class="eyebrow">Atelier FDM &middot; Paris 11<sup>e</sup> &middot; buse 0,4 mm</p>
+        <h1>On imprime vos idées,<br><em>couche</em> après couche.</h1>
+        <p class="lead">
+          Catalogue de modèles prêts à imprimer ou votre propre fichier&nbsp;: vous choisissez,
+          on lance la machine. Le prix se calcule au poids de plastique, sans surprise.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#catalogue">Voir les modèles</a>
+          <a class="btn btn-ghost" href="#estimateur">Calculer un prix</a>
+        </div>
+        <dl class="hero-stats">
+          <div><dt>Couche</dt><dd>0,20 mm</dd></div>
+          <div><dt>Délai moyen</dt><dd>3 jours</dd></div>
+          <div><dt>Dès</dt><dd>3,00 €</dd></div>
+          <div><dt>Plateau</dt><dd>256 mm</dd></div>
+        </dl>
+      </div>
+
+      <div class="hero-print" aria-hidden="true">
+        <div class="printer">
+          <div class="rail"><div class="head-y"><div class="head-x"><span class="nozzle"></span></div></div></div>
+          <div class="plate">
+            <div class="object">
+              <svg viewBox="0 0 120 140" role="img" aria-hidden="true">
+                <defs>
+                  <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="var(--accent)"/>
+                    <stop offset="1" stop-color="var(--accent-deep)"/>
+                  </linearGradient>
+                  <pattern id="layers" width="120" height="4" patternUnits="userSpaceOnUse">
+                    <rect width="120" height="4" fill="url(#lg)"/>
+                    <rect width="120" height="1" fill="#000" opacity=".16"/>
+                  </pattern>
+                </defs>
+                <path d="M60 4c17 12 25 26 25 40 0 13-14 20-14 33 0 14 20 20 20 39 0 12-14 20-31 20s-31-8-31-20c0-19 20-25 20-39 0-13-14-20-14-33C35 30 43 16 60 4Z" fill="url(#layers)"/>
+              </svg>
+            </div>
+          </div>
+          <div class="bed-grid"></div>
+          <p class="gcode"><span id="gcodeLine">G1 Z0.20 F1200 ; couche 1</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>PLA</span><span>&bull;</span><span>PETG</span><span>&bull;</span><span>TPU souple</span><span>&bull;</span><span>PLA Silk</span><span>&bull;</span><span>Pièces sur mesure</span><span>&bull;</span><span>Réparation</span><span>&bull;</span><span>Prototypage</span><span>&bull;</span>
+        <span>PLA</span><span>&bull;</span><span>PETG</span><span>&bull;</span><span>TPU souple</span><span>&bull;</span><span>PLA Silk</span><span>&bull;</span><span>Pièces sur mesure</span><span>&bull;</span><span>Réparation</span><span>&bull;</span><span>Prototypage</span><span>&bull;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CATALOGUE ══ -->
+  <section class="sec" id="catalogue">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow">Catalogue</p>
+        <h2>Des modèles prêts à partir sur le plateau</h2>
+        <p class="sec-sub">Le poids indiqué est celui de la pièce imprimée en PLA, remplissage 15 %. Le prix en découle directement.</p>
+      </header>
+
+      <div class="filters" role="group" aria-label="Filtrer les modèles">
+        <button class="chip is-on" data-filter="tous" type="button">Tous</button>
+        <button class="chip" data-filter="deco" type="button">Déco</button>
+        <button class="chip" data-filter="bureau" type="button">Bureau</button>
+        <button class="chip" data-filter="gaming" type="button">Gaming</button>
+        <button class="chip" data-filter="figurine" type="button">Figurines</button>
+        <button class="chip" data-filter="utile" type="button">Utile</button>
+      </div>
+
+      <div class="grid" id="grid"></div>
+
+      <p class="grid-note">Vous avez votre propre fichier&nbsp;? Envoyez-nous un <code>.stl</code> ou un <code>.3mf</code> : on le pèse et on vous répond sous 24 h.</p>
+    </div>
+  </section>
+
+  <!-- ══ TARIFS ══ -->
+  <section class="sec sec-alt" id="tarifs">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow">Tarifs</p>
+        <h2>Un prix au poids, affiché noir sur blanc</h2>
+        <p class="sec-sub">Matière, électricité et post-traitement de base compris. Pas de frais cachés.</p>
+      </header>
+
+      <ol class="ladder" id="ladder"></ol>
+
+      <div class="tarif-notes">
+        <div class="note">
+          <h3>Au-delà de 200 g</h3>
+          <p>Les grosses pièces demandent souvent un découpage, plus de matière et un temps machine long : on en discute ensemble et je vous fais un prix juste.</p>
+          <a class="link-arrow" href="#contact">Demander un devis</a>
+        </div>
+        <div class="note">
+          <h3>Entre deux paliers</h3>
+          <p>Le prix est calculé au prorata entre les paliers. Un modèle de 75 g tombe pile entre 50 g et 100 g&nbsp;: <strong>9,00 €</strong>.</p>
+          <a class="link-arrow" href="#estimateur">Tester l'estimateur</a>
+        </div>
+        <div class="note">
+          <h3>Quantité</h3>
+          <p>À partir de 5 exemplaires identiques, <strong>−10 %</strong> sur le lot. À partir de 20, on passe en tarif série.</p>
+          <a class="link-arrow" href="#contact">Parler d'une série</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ESTIMATEUR ══ -->
+  <section class="sec" id="estimateur">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow">Estimateur</p>
+        <h2>Combien coûterait votre pièce&nbsp;?</h2>
+        <p class="sec-sub">Bougez le curseur : le prix, la longueur de filament et le temps machine se mettent à jour.</p>
+      </header>
+
+      <div class="calc">
+        <div class="calc-controls">
+          <label class="field" for="weight">
+            <span class="field-lab">Poids de la pièce</span>
+            <output class="field-val" id="weightOut">100 g</output>
+          </label>
+          <input type="range" id="weight" min="5" max="400" step="5" value="100" aria-describedby="weightOut">
+          <div class="range-ticks" aria-hidden="true"><span>5 g</span><span>100 g</span><span>200 g</span><span>300 g</span><span>400 g</span></div>
+
+          <label class="field" for="qty">
+            <span class="field-lab">Quantité</span>
+            <output class="field-val" id="qtyOut">1 pièce</output>
+          </label>
+          <input type="range" id="qty" min="1" max="20" step="1" value="1" aria-describedby="qtyOut">
+          <div class="range-ticks" aria-hidden="true"><span>1</span><span>5</span><span>10</span><span>15</span><span>20</span></div>
+
+          <p class="calc-hint" id="calcHint">Un porte-clés pèse ~12 g, un vase ~200 g.</p>
+        </div>
+
+        <div class="calc-out">
+          <p class="calc-lab">Estimation</p>
+          <p class="calc-price"><span id="price">12,00</span><span class="cur">€</span></p>
+          <p class="calc-sub" id="priceSub">100 g en PLA &middot; 1 pièce</p>
+          <ul class="calc-meta">
+            <li><span>Filament</span><b id="metaFil">33 m</b></li>
+            <li><span>Temps machine</span><b id="metaTime">8 h 20</b></li>
+            <li><span>Prix au gramme</span><b id="metaGram">0,120 €</b></li>
+          </ul>
+          <button class="btn btn-primary full" id="addCustom" type="button">Ajouter cette pièce au devis</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ÉTAPES ══ -->
+  <section class="sec sec-alt" id="etapes">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow">Déroulé</p>
+        <h2>De votre message à la pièce en main</h2>
+      </header>
+      <ol class="steps">
+        <li>
+          <span class="step-n">01</span>
+          <h3>Vous choisissez</h3>
+          <p>Un modèle du catalogue, ou votre fichier <code>.stl</code>. Dites-nous la couleur et la matière souhaitées.</p>
+        </li>
+        <li>
+          <span class="step-n">02</span>
+          <h3>On pèse et on valide</h3>
+          <p>Le trancheur donne le poids exact. Vous recevez le prix ferme et le délai avant qu'on lance quoi que ce soit.</p>
+        </li>
+        <li>
+          <span class="step-n">03</span>
+          <h3>Impression</h3>
+          <p>Couche de 0,20 mm, remplissage 15 % par défaut. Photo de la pièce sur le plateau dès la sortie.</p>
+        </li>
+        <li>
+          <span class="step-n">04</span>
+          <h3>Finition et remise</h3>
+          <p>Supports retirés, arêtes ébavurées. Retrait à l'atelier ou envoi Colissimo (5,90 € en France).</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ══ MATIÈRES ══ -->
+  <section class="sec" id="matieres">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow">Matières &amp; couleurs</p>
+        <h2>Quatre filaments, un seul tarif</h2>
+        <p class="sec-sub">Le prix ne change pas selon la matière : c'est le poids qui compte. On vous conseille selon l'usage.</p>
+      </header>
+
+      <div class="mats">
+        <article class="mat">
+          <h3>PLA</h3>
+          <p class="mat-use">Déco, figurines, prototypes</p>
+          <p>Le plus précis et le plus net. Rigide, mais il n'aime ni la voiture en plein soleil ni le lave-vaisselle.</p>
+          <ul class="specs"><li><span>Buse</span><b>210 °C</b></li><li><span>Tenue</span><b>55 °C</b></li></ul>
+        </article>
+        <article class="mat">
+          <h3>PETG</h3>
+          <p class="mat-use">Pièces techniques, extérieur</p>
+          <p>Plus souple et résistant aux chocs, supporte la chaleur et l'humidité. Idéal pour ce qui vit dehors.</p>
+          <ul class="specs"><li><span>Buse</span><b>240 °C</b></li><li><span>Tenue</span><b>80 °C</b></li></ul>
+        </article>
+        <article class="mat">
+          <h3>TPU</h3>
+          <p class="mat-use">Joints, coques, semelles</p>
+          <p>Caoutchouteux, ça plie et ça revient. Impression lente, donc réservé aux petites pièces.</p>
+          <ul class="specs"><li><span>Dureté</span><b>95 A</b></li><li><span>Vitesse</span><b>25 mm/s</b></li></ul>
+        </article>
+        <article class="mat">
+          <h3>PLA Silk</h3>
+          <p class="mat-use">Cadeaux, vases, trophées</p>
+          <p>Fini satiné qui accroche la lumière. Magnifique sur les grandes surfaces lisses en vase mode.</p>
+          <ul class="specs"><li><span>Effet</span><b>Satiné</b></li><li><span>Couche</span><b>0,20 mm</b></li></ul>
+        </article>
+      </div>
+
+      <div class="swatches">
+        <p class="swatch-lab">Couleurs en stock</p>
+        <ul>
+          <li><i style="--c:#1A1A1A"></i>Noir mat</li>
+          <li><i style="--c:#F5F3EF"></i>Blanc os</li>
+          <li><i style="--c:#E14D0B"></i>Orange atelier</li>
+          <li><i style="--c:#0F6E78"></i>Bleu canard</li>
+          <li><i style="--c:#2E7D4F"></i>Vert sapin</li>
+          <li><i style="--c:#C8102E"></i>Rouge</li>
+          <li><i style="--c:#D9B44A"></i>Or silk</li>
+          <li><i style="--c:#8E7CC3"></i>Lavande</li>
+          <li><i style="--c:#9AA0A6"></i>Gris béton</li>
+          <li><i style="--c:linear-gradient(90deg,#E14D0B,#D9B44A,#2E7D4F)"></i>Dégradé</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FAQ ══ -->
+  <section class="sec sec-alt" id="faq">
+    <div class="wrap faq-wrap">
+      <header class="sec-head">
+        <p class="eyebrow">Questions</p>
+        <h2>Ce qu'on nous demande le plus</h2>
+      </header>
+
+      <div class="faq">
+        <details open>
+          <summary>Comment connaissez-vous le poids avant d'imprimer&nbsp;?</summary>
+          <p>Le fichier passe dans un trancheur (PrusaSlicer) qui simule l'impression et donne le poids de filament à 1 g près. C'est cette valeur qui sert au tarif, jamais une estimation à la louche.</p>
+        </details>
+        <details>
+          <summary>Et si la pièce rate&nbsp;?</summary>
+          <p>C'est pour nous. Un décollement, un bouchon de buse ou une couche ratée sont relancés à nos frais : vous payez la pièce, pas nos aléas machine.</p>
+        </details>
+        <details>
+          <summary>Quelle taille maximum&nbsp;?</summary>
+          <p>256 × 256 × 256 mm en une seule pièce. Au-delà, on découpe le modèle et on colle les sections (cyanoacrylate) — comptez un supplément d'assemblage discuté à l'avance.</p>
+        </details>
+        <details>
+          <summary>Puis-je fournir un modèle trouvé en ligne&nbsp;?</summary>
+          <p>Oui, tant que sa licence autorise l'impression à la demande. On vérifie ensemble : la plupart des modèles Creative Commons le permettent pour un usage personnel.</p>
+        </details>
+        <details>
+          <summary>Les pièces vont-elles au contact alimentaire&nbsp;?</summary>
+          <p>Non. Les couches d'une impression FDM retiennent les bactéries. Pour un pot ou un vase, on imprime une doublure ou on vous conseille un verre à insérer.</p>
+        </details>
+        <details>
+          <summary>Quels délais&nbsp;?</summary>
+          <p>3 jours ouvrés en moyenne pour une pièce du catalogue, 5 à 7 pour du sur-mesure avec validation de fichier. Une urgence ? Dites-le, on regarde le planning des machines.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT ══ -->
+  <section class="sec" id="contact">
+    <div class="wrap contact-in">
+      <div class="contact-txt">
+        <p class="eyebrow">Contact</p>
+        <h2>Parlons de votre pièce</h2>
+        <p>Décrivez votre projet, joignez un fichier si vous en avez un. On répond sous 24 h ouvrées avec un prix ferme et un délai.</p>
+        <ul class="contact-list">
+          <li><span>Atelier</span><b>12 rue des Bobines, 75011 Paris</b></li>
+          <li><span>Ouvert</span><b>Lun–Ven, 10 h – 19 h</b></li>
+          <li><span>Email</span><b>bonjour@printables.paris</b></li>
+          <li><span>Téléphone</span><b>01 43 00 00 00</b></li>
+        </ul>
+      </div>
+
+      <form class="form" id="contactForm" novalidate>
+        <div class="row">
+          <label class="lab" for="cName">Nom<input id="cName" name="nom" type="text" required placeholder="Camille Durand"></label>
+          <label class="lab" for="cMail">Email<input id="cMail" name="email" type="email" required placeholder="camille@exemple.fr"></label>
+        </div>
+        <label class="lab" for="cSubj">Sujet
+          <select id="cSubj" name="sujet">
+            <option>Un modèle du catalogue</option>
+            <option>Mon propre fichier .stl</option>
+            <option>Une pièce de plus de 200 g</option>
+            <option>Une série (5 pièces et +)</option>
+            <option>Une réparation / pièce de rechange</option>
+          </select>
+        </label>
+        <label class="lab" for="cMsg">Votre projet
+          <textarea id="cMsg" name="message" rows="5" required placeholder="Une pièce de rechange pour mon aspirateur, environ 40 g, en PETG noir…"></textarea>
+        </label>
+        <p class="form-note" id="formNote" role="status">Le contenu de votre devis en cours sera joint au message.</p>
+        <button class="btn btn-primary full" type="submit">Envoyer la demande</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-in">
+    <div>
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand-name">Printables<span class="brand-dot">.</span></span>
+      </a>
+      <p class="foot-p">Atelier d'impression 3D à Paris. Modèles du catalogue, pièces sur mesure, réparations.</p>
+    </div>
+    <nav aria-label="Pied de page">
+      <p class="foot-h">Le site</p>
+      <a href="#catalogue">Modèles</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#estimateur">Estimateur</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div>
+      <p class="foot-h">Atelier</p>
+      <p class="foot-p">12 rue des Bobines<br>75011 Paris<br>Lun–Ven, 10 h – 19 h</p>
+    </div>
+  </div>
+  <div class="wrap foot-bot">
+    <p>© <span id="year">2026</span> Printables — site de démonstration.</p>
+    <p class="mono">Buse 0,4 mm · Couche 0,20 mm · Remplissage 15 %</p>
+  </div>
+</footer>
+
+<!-- ══ DEVIS (panier) ══ -->
+<div class="drawer-back" id="drawerBack" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+  <header class="drawer-head">
+    <h2 id="drawerTitle">Mon devis</h2>
+    <button class="icon-btn" id="closeCart" type="button" aria-label="Fermer le devis">✕</button>
+  </header>
+  <div class="drawer-body" id="cartBody"></div>
+  <footer class="drawer-foot">
+    <div class="drawer-tot"><span>Total estimé</span><b id="cartTotal">0,00 €</b></div>
+    <p class="drawer-note" id="cartNote">Estimation hors livraison. Le prix est confirmé après passage au trancheur.</p>
+    <button class="btn btn-primary full" id="sendQuote" type="button">Envoyer ma demande</button>
+  </footer>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
