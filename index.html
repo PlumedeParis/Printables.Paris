@@ -38,7 +38,7 @@
         <span class="ico-sun" aria-hidden="true"></span>
       </button>
       <button class="btn btn-quote" id="openCart" type="button" aria-haspopup="dialog">
-        Mon devis <span class="pill" id="cartCount">0</span>
+        Mon panier <span class="pill" id="cartCount">0</span>
       </button>
       <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu">
         <span></span><span></span><span></span>
@@ -85,8 +85,9 @@
         <h2>Besoin d'inspiration&nbsp;? Voici quelques pistes</h2>
         <p class="sec-sub">
           Ce ne sont pas des fiches produit avec prix fixe : ce sont des idées pour se lancer.
-          Vous avez un modèle précis en tête, un lien ou un fichier&nbsp;? Envoyez-le-moi et je
-          vous dis le poids et le prix.
+          Cliquez sur une idée pour l'ajouter à votre panier&nbsp;; le poids et le prix se
+          définissent ensuite ensemble. Un modèle précis en tête, un lien ou un fichier&nbsp;?
+          Envoyez-le-moi.
         </p>
       </header>
 
@@ -162,7 +163,7 @@
             <li><span>Filament utilisé</span><b id="metaFil">34 m</b></li>
             <li><span>Prix au gramme</span><b id="metaGram">0,120 €</b></li>
           </ul>
-          <button class="btn btn-primary full" id="addCustom" type="button">Ajouter cette pièce au devis</button>
+          <button class="btn btn-primary full" id="addCustom" type="button">Ajouter cette pièce au panier</button>
         </div>
       </div>
     </div>
@@ -306,12 +307,12 @@
         <label class="lab" for="waMsg">Votre message
           <textarea id="waMsg" name="message" rows="5" placeholder="Bonjour ! Je voudrais faire imprimer le dragon articulé en noir, en 2 exemplaires."></textarea>
         </label>
-        <p class="form-note" id="formNote" role="status">Votre devis en cours sera ajouté au message.</p>
+        <p class="form-note" id="formNote" role="status">Votre panier en cours sera ajouté au message.</p>
         <button class="btn btn-wa full" type="submit">
           <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
           Copier mon message
         </button>
-        <p class="form-hint">Le texte part dans votre presse-papiers, avec le détail de votre devis. Collez-le dans WhatsApp et envoyez-le-moi.</p>
+        <p class="form-hint">Le texte part dans votre presse-papiers, avec le détail de votre panier. Collez-le dans WhatsApp et envoyez-le-moi.</p>
         <div class="msg-box" id="msgBox" hidden>
           <p class="form-hint">Votre navigateur bloque la copie automatique : sélectionnez ce texte et copiez-le à la main.</p>
           <textarea id="msgBoxText" rows="6" readonly></textarea>
@@ -350,12 +351,12 @@
   </div>
 </footer>
 
-<!-- ══ DEVIS (panier) ══ -->
+<!-- ══ PANIER ══ -->
 <div class="drawer-back" id="drawerBack" hidden></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
   <header class="drawer-head">
-    <h2 id="drawerTitle">Mon devis</h2>
-    <button class="icon-btn" id="closeCart" type="button" aria-label="Fermer le devis">✕</button>
+    <h2 id="drawerTitle">Mon panier</h2>
+    <button class="icon-btn" id="closeCart" type="button" aria-label="Fermer le panier">✕</button>
   </header>
   <div class="drawer-body" id="cartBody"></div>
   <footer class="drawer-foot">

@@ -1,7 +1,7 @@
 # Printables — site vitrine d'impression 3D à la demande
 
 Site statique (HTML / CSS / JavaScript, sans dépendance ni build) : idées
-d'objets à imprimer, grille tarifaire au poids, estimateur de prix, devis en
+d'objets à imprimer, grille tarifaire au poids, estimateur de prix, panier en
 ligne et demande préparée pour WhatsApp.
 
 Impression en PLA uniquement, sur **Bambu Lab A1 Combo** (volume
@@ -21,7 +21,7 @@ Publiable tel quel sur GitHub Pages (branche + dossier racine).
 
 Aucun serveur, aucune base de données, aucune adresse email, aucun numéro de
 téléphone publié. Les boutons « Copier ma demande » et « Copier mon message »
-composent le texte (message libre + détail du devis en cours) et le placent
+composent le texte (message libre + détail du panier en cours) et le placent
 dans le presse-papiers du visiteur, qui le colle dans WhatsApp.
 
 Si le navigateur refuse la copie automatique (`navigator.clipboard` puis
@@ -47,11 +47,11 @@ Règles appliquées par `priceFor()` dans `assets/js/app.js` :
 - en dessous de 20 g, le tarif minimum de 3,00 € s'applique ;
 - entre deux paliers, prix interpolé puis arrondi aux 50 centimes
   (75 g → 9,00 €, 45 g → 5,50 €) ;
-- au-delà de 200 g, aucun prix automatique : la pièce passe en devis ;
+- au-delà de 200 g, aucun prix automatique : la pièce passe en « à définir » ;
 - plusieurs exemplaires = prix unitaire × quantité, sans remise automatique.
 
 Modifier la constante `TIERS` suffit : carte du héros, échelle de prix,
-estimateur et devis se recalculent à partir d'elle.
+estimateur et panier se recalculent à partir d'elle.
 
 ## Idées d'impression
 
@@ -66,9 +66,9 @@ inspirer le visiteur. Le tableau `IDEAS` de `assets/js/app.js` :
 ```
 
 Pour ajouter une idée, ajoutez une chaîne dans le tableau `items` du bon
-groupe (ou créez un nouveau groupe `{ cat: '…', items: [...] }`). Le prix
-réel d'une pièce vient toujours de l'estimateur ou d'un échange direct, jamais
-de cette liste.
+groupe (ou créez un nouveau groupe `{ cat: '…', items: [...] }`). Cliquer sur
+une idée l'ajoute au panier sans poids ni prix (affiché « à définir ») ; le
+prix réel vient toujours de l'estimateur ou d'un échange direct.
 
 ## Couleurs
 
@@ -79,10 +79,10 @@ listées en HTML dans `index.html`, bloc `.swatches`.
 ## Contenu des fichiers
 
 - `index.html` — sections : héros, idées, tarifs, estimateur, déroulé,
-  matière, FAQ, contact, tiroir de devis.
+  matière, FAQ, contact, tiroir panier.
 - `assets/css/styles.css` — thèmes clair et sombre par variables CSS, mise en
   page responsive, animations.
-- `assets/js/app.js` — barème, idées, estimateur, devis persistant
+- `assets/js/app.js` — barème, idées, estimateur, panier persistant
   (`localStorage`), copie du message, thème, menu mobile.
 
 ## Détails d'implémentation
@@ -90,5 +90,5 @@ listées en HTML dans `index.html`, bloc `.swatches`.
 - Aucun délai, aucune adresse, aucun horaire, aucun email : ces informations
   restent pour la discussion WhatsApp.
 - Accessibilité : navigation au clavier, focus visible, `aria-*` sur le menu, le
-  tiroir de devis et les curseurs, respect de `prefers-reduced-motion`.
+  tiroir panier et les curseurs, respect de `prefers-reduced-motion`.
 - Thème : suit le réglage système par défaut, bouton de bascule mémorisé.

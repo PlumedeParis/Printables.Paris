@@ -274,11 +274,14 @@ code{ font-family: var(--mono); font-size: .88em; background: var(--surface-2); 
 }
 .idea-list{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.55rem; }
 .idea{
-  font-size:.93rem; color: var(--ink-soft); background: var(--surface);
+  -webkit-appearance:none; appearance:none; font-family: var(--body); font-size:.93rem;
+  color: var(--ink-soft); background: var(--surface); cursor:pointer;
   border:1px solid var(--line); border-radius:99px; padding:.5rem 1rem;
-  transition: border-color .2s ease, color .2s ease, transform .2s ease;
+  transition: border-color .2s ease, color .2s ease, transform .2s ease, background .2s ease;
 }
 .idea:hover{ border-color: var(--accent); color: var(--ink); transform: translateY(-1px); }
+.idea:active{ transform: translateY(0); }
+.idea.done{ background: var(--ok); border-color: var(--ok); color:#fff; }
 
 /* échelle de tarifs */
 .ladder{ list-style:none; margin:0; padding:0; display:grid; gap:.35rem; }

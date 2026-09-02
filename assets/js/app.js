@@ -104,7 +104,7 @@
   if (ideasEl) {
     ideasEl.innerHTML = IDEAS.map(function (group) {
       var pills = group.items.map(function (name) {
-        return '<li class="idea">' + name + '</li>';
+        return '<li><button class="idea" type="button">' + name + '</button></li>';
       }).join('');
       return '<div class="idea-group reveal">' +
         '<h3>' + group.cat + '</h3>' +
@@ -193,8 +193,8 @@
     toastT = setTimeout(function () { toastEl.classList.remove('on'); }, 3200);
   }
 
-  /* ── devis (panier) ───────────────────────────────────── */
-  var KEY = 'printables.devis.v3';
+  /* ── panier ───────────────────────────────────────────── */
+  var KEY = 'printables.panier.v1';
   var cart = [];
   try { cart = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { cart = []; }
 
@@ -218,14 +218,18 @@
     $('#openCart').classList.toggle('has-items', n > 0);
 
     if (!cart.length) {
-      body.innerHTML = '<p class="cart-empty">Votre devis est vide. Ajoutez un modèle du catalogue, ou une pièce sur mesure depuis l\'estimateur.</p>';
+      body.innerHTML = '<p class="cart-empty">Votre panier est vide. Cliquez sur une idée ci-dessus, ou ajoutez une pièce sur mesure depuis l\'estimateur.</p>';
     } else {
       body.innerHTML = cart.map(function (it, i) {
         var t = lineTotal(it.g, it.qty);
+        var priceLabel = t === null ? 'À définir' : euro(t);
+        var metaLabel = it.g
+          ? '≈ ' + it.g + ' g · ' + (priceFor(it.g) === null ? 'sur mesure' : euro(priceFor(it.g)) + ' / pièce')
+          : 'Poids à définir ensemble';
         return '<div class="cart-item">' +
           '<h3>' + it.name + '</h3>' +
-          '<span class="ci-p">' + (t === null ? 'Devis' : euro(t)) + '</span>' +
-          '<span class="ci-meta">≈ ' + it.g + ' g · ' + (priceFor(it.g) === null ? 'sur mesure' : euro(priceFor(it.g)) + ' / pièce') + '</span>' +
+          '<span class="ci-p">' + priceLabel + '</span>' +
+          '<span class="ci-meta">' + metaLabel + '</span>' +
           '<div class="qty"><button type="button" data-dec="' + i + '" aria-label="Retirer une unité">−</button>' +
           '<b>' + it.qty + '</b>' +
           '<button type="button" data-inc="' + i + '" aria-label="Ajouter une unité">+</button></div>' +
@@ -235,16 +239,16 @@
     }
 
     var tot = cartTotals();
-    $('#cartTotal').textContent = tot.sum > 0 ? euro(tot.sum) : (tot.quote ? 'Sur devis' : euro(0));
+    $('#cartTotal').textContent = tot.sum > 0 ? euro(tot.sum) : (tot.quote ? 'À définir' : euro(0));
     $('#cartNote').textContent = tot.quote
-      ? 'Une pièce dépasse 200 g : son prix sera fixé avec vous avant l\'impression.'
-      : 'Estimation d\'après les poids du catalogue. Le prix est confirmé après passage au trancheur.';
+      ? 'Le poids de certaines pièces reste à définir : leur prix sera fixé avec vous avant l\'impression.'
+      : 'Estimation d\'après les poids indiqués. Le prix est confirmé après passage au trancheur.';
 
     var note = $('#formNote');
     if (note) {
       note.textContent = cart.length
-        ? 'Votre devis (' + n + (n > 1 ? ' pièces' : ' pièce') + ') sera ajouté au message.'
-        : 'Votre devis en cours sera ajouté au message.';
+        ? 'Votre panier (' + n + (n > 1 ? ' pièces' : ' pièce') + ') sera ajouté au message.'
+        : 'Votre panier en cours sera ajouté au message.';
     }
     save();
   }
@@ -259,6 +263,18 @@
 
   document.addEventListener('click', function (e) {
     if (!(e.target instanceof Element)) return;
+
+    var idea = e.target.closest('.idea');
+    if (idea) {
+      var name = idea.textContent.trim();
+      addItem(name, null, 1);
+      idea.classList.add('done');
+      var old = idea.textContent;
+      idea.textContent = 'Ajouté ✓';
+      setTimeout(function () { idea.classList.remove('done'); idea.textContent = old; }, 1300);
+      toast('« ' + name + ' » ajouté à votre panier');
+      return;
+    }
 
     var inc = e.target.closest('[data-inc]'), dec = e.target.closest('[data-dec]'), rm = e.target.closest('[data-rm]');
     if (inc) { cart[+inc.getAttribute('data-inc')].qty++; renderCart(); }
@@ -275,7 +291,7 @@
     addCustom.addEventListener('click', function () {
       var g = +wIn.value, q = +qIn.value;
       addItem('Pièce sur mesure ≈ ' + g + ' g', g, q);
-      toast('Pièce de ' + g + ' g ajoutée à votre devis');
+      toast('Pièce de ' + g + ' g ajoutée à votre panier');
       openDrawer();
     });
   }
@@ -307,18 +323,22 @@
     if (!cart.length) return '';
     var lines = cart.map(function (it) {
       var t = lineTotal(it.g, it.qty);
-      return '• ' + it.name + ' × ' + it.qty + ' (≈ ' + it.g + ' g) : ' +
+      var weightPart = it.g ? ' (≈ ' + it.g + ' g)' : '';
+      return '• ' + it.name + ' × ' + it.qty + weightPart + ' : ' +
         (t === null ? 'à définir' : euro(t));
     });
     var tot = cartTotals();
-    lines.push('Total estimé : ' + euro(tot.sum) + (tot.quote ? ' + pièces à chiffrer' : ''));
+    var totalLine = tot.sum > 0
+      ? 'Total estimé : ' + euro(tot.sum) + (tot.quote ? ' + pièces à chiffrer' : '')
+      : (tot.quote ? 'Total : à chiffrer ensemble' : 'Total estimé : ' + euro(tot.sum));
+    lines.push(totalLine);
     return lines.join('\n');
   }
 
   $('#sendQuote').addEventListener('click', function () {
-    if (!cart.length) { toast('Ajoutez d\'abord un modèle à votre devis'); return; }
+    if (!cart.length) { toast('Ajoutez d\'abord une idée à votre panier'); return; }
     copyText('Bonjour ! Je voudrais faire imprimer :\n\n' + quoteText(),
-      'Devis copié ! Collez-le dans WhatsApp et envoyez-le-moi.');
+      'Panier copié ! Collez-le dans WhatsApp et envoyez-le-moi.');
   });
 
   renderCart();
@@ -333,7 +353,7 @@
       if (!msg && !cart.length) {
         ta.classList.add('err');
         ta.focus();
-        toast('Écrivez un mot, ou ajoutez un modèle à votre devis');
+        toast('Écrivez un mot, ou ajoutez une idée à votre panier');
         return;
       }
       ta.classList.remove('err');
