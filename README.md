@@ -84,7 +84,8 @@ s'appliquent :
   sur le prix final » dès que le nombre de pièces suffit — la remise se voit
   même avant de connaître le prix. Sinon, un rappel du prochain palier
   s'affiche tant qu'on n'est pas au maximum. Le message copié pour WhatsApp
-  reprend le même détail (sous-total et remise) ;
+  reprend le sous-total, et la ligne « Remise : −X % » termine toujours le
+  message, même quand rien n'est encore chiffré ;
 - à l'estimateur, comme aperçu : la remise est calculée sur la seule
   quantité de la pièce en cours de réglage, avec un badge « Remise incluse »
   (remise active) ou « Encore X pièce(s) pour −Y % » (prochain palier) —

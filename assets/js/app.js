@@ -445,12 +445,14 @@
     var tot = cartTotals();
     if (tot.discount > 0 && tot.raw > 0) {
       lines.push('Sous-total (' + tot.qty + (tot.qty > 1 ? ' pièces' : ' pièce') + ') : ' + euro(tot.raw));
-      lines.push('Remise −' + Math.round(tot.discount * 100) + ' % : −' + euro(Math.round((tot.raw - tot.sum) * 100) / 100));
     }
     var totalLine = tot.sum > 0
       ? 'Total estimé : ' + euro(tot.sum) + (tot.quote ? ' + pièces à chiffrer' : '')
       : (tot.quote ? 'Total : à chiffrer ensemble' : 'Total estimé : ' + euro(tot.sum));
     lines.push(totalLine);
+    if (tot.discount > 0) {
+      lines.push('Remise : −' + Math.round(tot.discount * 100) + ' % (' + tot.qty + (tot.qty > 1 ? ' pièces' : ' pièce') + ')');
+    }
     return lines.join('\n');
   }
 
