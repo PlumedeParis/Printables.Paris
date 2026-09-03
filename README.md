@@ -56,40 +56,41 @@ Règles appliquées par `priceFor()` dans `assets/js/app.js` :
 Modifier la constante `TIERS` suffit : carte du héros, échelle de prix,
 estimateur et panier se recalculent à partir d'elle.
 
-## Remise sur le montant
+## Remise quantité
 
-La technique la plus simple et la plus lisible : un palier de remise dès
-que le panier atteint un certain montant. Pas de comptage de pièces —
-seulement le total, dans `BULK_TIERS` (`assets/js/app.js`) :
+Sur le nombre total de pièces du panier (tous modèles confondus), dans
+`BULK_TIERS` (`assets/js/app.js`) :
 
-| Montant | Remise |
-| ------- | ------ |
-| 20 €    | −10 %  |
-| 40 €    | −20 %  |
-| 60 €    | −30 %  |
-| 100 €   | −40 %  |
-| 150 €   | −50 %  |
+| Pièces | Remise |
+| ------ | ------ |
+| 2      | −10 %  |
+| 4      | −20 %  |
+| 6      | −30 %  |
+| 10     | −40 %  |
+| 16     | −50 %  |
 
-`bulkDiscount(amount)` renvoie le meilleur palier atteint ;
-`nextBulkTier(amount)` renvoie le prochain palier non atteint (ou `null` au
-maximum). Elles s'appliquent :
+`bulkDiscount(qty)` renvoie le meilleur palier atteint ; `nextBulkTier(qty)`
+renvoie le prochain palier non atteint (ou `null` au maximum). Elles
+s'appliquent :
 
 - au panier : `cartTotals()` additionne le prix brut de chaque ligne
-  (`raw`), calcule la remise sur ce montant, et renvoie le prix remisé
+  (`raw`) et le nombre total de pièces (`qty`, une idée sans poids connu
+  compte aussi), calcule la remise sur ce nombre, et renvoie le prix remisé
   (`sum`) ; le tiroir affiche le détail (sous-total, remise, total) dès
-  qu'une remise s'applique, avec un rappel du prochain palier tant qu'on
-  n'est pas au maximum, et le message copié pour WhatsApp reprend le même
-  détail ;
-- à l'estimateur, comme aperçu : la remise est calculée sur le montant de
-  la pièce en cours de réglage, avec un badge « Remise incluse » (remise
-  active) ou « Encore X € pour −Y % » (prochain palier) — avant même
-  l'ajout au panier ; une fois ajoutée, le panier recalcule sur le montant
-  réel de la commande, qui peut différer si d'autres pièces s'y trouvent
-  déjà ;
+  qu'une remise s'applique et qu'au moins une pièce a un prix, avec un
+  rappel du prochain palier tant qu'on n'est pas au maximum, et le message
+  copié pour WhatsApp reprend le même détail ;
+- à l'estimateur, comme aperçu : la remise est calculée sur la seule
+  quantité de la pièce en cours de réglage, avec un badge « Remise incluse »
+  (remise active) ou « Encore X pièce(s) pour −Y % » (prochain palier) —
+  avant même l'ajout au panier ; une fois ajoutée, le panier recalcule sur
+  la quantité réelle de la commande, qui peut différer si d'autres pièces
+  s'y trouvent déjà ;
 - au clic sur une idée ou l'ajout d'une pièce sur mesure : `discountToast()`
   affiche immédiatement, dans le message flottant, la remise déjà active ou
-  ce qu'il manque pour la débloquer — la promotion se voit dès qu'on choisit
-  un produit, pas seulement une fois le panier ouvert.
+  ce qu'il manque pour la débloquer (dès qu'au moins une pièce chiffrée est
+  au panier) — la promotion se voit dès qu'on choisit un produit, pas
+  seulement une fois le panier ouvert.
 
 Modifier `BULK_TIERS` (paliers ou taux) suffit à ajuster la remise partout.
 
