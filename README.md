@@ -20,9 +20,10 @@ Publiable tel quel sur GitHub Pages (branche + dossier racine).
 ## Comment part une demande
 
 Aucun serveur, aucune base de données, aucune adresse email, aucun numéro de
-téléphone publié. Les boutons « Copier ma demande » et « Copier mon message »
-composent le texte (message libre + détail du panier en cours) et le placent
-dans le presse-papiers du visiteur, qui le colle dans WhatsApp.
+téléphone publié. Le panier se remplit en cliquant une idée ou en décrivant
+une pièce personnalisée (voir plus bas) ; le bouton « Copier ma demande », dans
+le tiroir du panier, compose le détail complet et le place dans le
+presse-papiers du visiteur, qui le colle dans WhatsApp.
 
 Si le navigateur refuse la copie automatique (`navigator.clipboard` puis
 `document.execCommand` en secours), le texte s'affiche dans une zone
@@ -76,21 +77,25 @@ s'appliquent :
 - au panier : `cartTotals()` additionne le prix brut de chaque ligne
   (`raw`) et le nombre total de pièces (`qty`, une idée sans poids connu
   compte aussi), calcule la remise sur ce nombre, et renvoie le prix remisé
-  (`sum`) ; le tiroir affiche le détail (sous-total, remise, total) dès
-  qu'une remise s'applique et qu'au moins une pièce a un prix, avec un
-  rappel du prochain palier tant qu'on n'est pas au maximum, et le message
-  copié pour WhatsApp reprend le même détail ;
+  (`sum`). Le tiroir affiche le détail (sous-total, remise, total) dès
+  qu'une remise s'applique et qu'au moins une pièce a un prix ; si le panier
+  ne contient que des pièces sans poids connu, le total affiche « Prix à
+  définir selon le modèle » et la note ajoute directement « Vous aurez −X %
+  sur le prix final » dès que le nombre de pièces suffit — la remise se voit
+  même avant de connaître le prix. Sinon, un rappel du prochain palier
+  s'affiche tant qu'on n'est pas au maximum. Le message copié pour WhatsApp
+  reprend le même détail (sous-total et remise) ;
 - à l'estimateur, comme aperçu : la remise est calculée sur la seule
   quantité de la pièce en cours de réglage, avec un badge « Remise incluse »
   (remise active) ou « Encore X pièce(s) pour −Y % » (prochain palier) —
   avant même l'ajout au panier ; une fois ajoutée, le panier recalcule sur
   la quantité réelle de la commande, qui peut différer si d'autres pièces
   s'y trouvent déjà ;
-- au clic sur une idée ou l'ajout d'une pièce sur mesure : `discountToast()`
-  affiche immédiatement, dans le message flottant, la remise déjà active ou
-  ce qu'il manque pour la débloquer (dès qu'au moins une pièce chiffrée est
-  au panier) — la promotion se voit dès qu'on choisit un produit, pas
-  seulement une fois le panier ouvert.
+- au clic sur une idée ou à l'ajout d'une pièce (sur mesure ou personnalisée,
+  voir plus bas) : `discountToast()` affiche immédiatement, dans le message
+  flottant, la remise déjà active ou ce qu'il manque pour la débloquer, dès
+  qu'au moins une pièce est au panier (prix connu ou non) — la promotion se
+  voit dès qu'on choisit un produit, pas seulement une fois le panier ouvert.
 
 Modifier `BULK_TIERS` (paliers ou taux) suffit à ajuster la remise partout.
 
@@ -111,6 +116,26 @@ groupe (ou créez un nouveau groupe `{ cat: '…', items: [...] }`). Cliquer sur
 une idée l'ajoute au panier sans poids ni prix (affiché « à définir ») ; le
 prix réel vient toujours de l'estimateur ou d'un échange direct.
 
+## Produit personnalisé
+
+La section Contact (`#customForm` dans `index.html`) n'est plus un simple
+champ de message libre : c'est un petit formulaire (nom du produit, poids
+approximatif, quantité, description, case « je joindrai un fichier ») qui
+ajoute directement une ligne au panier, comme une idée ou une pièce de
+l'estimateur.
+
+- le poids saisi calcule un prix indicatif avec la même grille tarifaire
+  (`priceFor()`) — pas de champ de prix séparé ;
+- la description et le drapeau « fichier » sont stockés sur l'article du
+  panier (`it.desc`, `it.file`) et réapparaissent dans la carte du panier et
+  dans le message copié pour WhatsApp (précédés de `↳`, avec un rappel
+  « 📎 Fichier à joindre » si la case est cochée) — cocher la case n'attache
+  aucun fichier réel, c'est un pense-bête pour ne pas l'oublier à l'envoi ;
+- nom et description viennent d'un champ texte libre : ils passent par
+  `escapeHtml()` avant d'être insérés dans le panier (`innerHTML`), pour
+  éviter toute injection de balises. Le texte copié pour WhatsApp reste du
+  texte brut, jamais interprété comme du HTML.
+
 ## Couleurs
 
 Les bobines annoncées sur le site (section « Le PLA ») : noir, blanc, gris,
@@ -120,11 +145,12 @@ listées en HTML dans `index.html`, bloc `.swatches`.
 ## Contenu des fichiers
 
 - `index.html` — sections : héros, idées, tarifs, estimateur, déroulé,
-  matière, FAQ, contact, tiroir panier.
+  matière, FAQ, contact (formulaire de produit personnalisé), tiroir panier.
 - `assets/css/styles.css` — thèmes clair et sombre par variables CSS, mise en
   page responsive, animations.
-- `assets/js/app.js` — barème, idées, estimateur, panier persistant
-  (`localStorage`), copie du message, thème, menu mobile.
+- `assets/js/app.js` — barème, remise quantité, idées, estimateur, produit
+  personnalisé, panier persistant (`localStorage`), copie du message
+  (échappement HTML inclus), thème, menu mobile.
 
 ## Détails d'implémentation
 

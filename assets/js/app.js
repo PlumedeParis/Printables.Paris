@@ -98,6 +98,13 @@
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
+  /* échappe le texte libre (nom/description saisis) avant de l'insérer en innerHTML */
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   /* ── copie dans le presse-papiers ─────────────────────── */
   function copyText(text, okMsg) {
     function fallback() {
@@ -250,7 +257,7 @@
   function discountToast(label, verb) {
     verb = verb || 'ajouté';
     var tot = cartTotals();
-    if (tot.raw <= 0) {
+    if (tot.qty <= 0) {
       toast('« ' + label + ' » ' + verb + ' à votre panier');
       return;
     }
@@ -304,14 +311,19 @@
         var metaLabel = it.g
           ? '≈ ' + it.g + ' g · ' + (priceFor(it.g) === null ? 'sur mesure' : euro(priceFor(it.g)) + ' / pièce')
           : 'Poids à définir ensemble';
+        var extraHtml = '';
+        if (it.desc) extraHtml += '<p class="ci-desc">' + escapeHtml(it.desc) + '</p>';
+        if (it.file) extraHtml += '<span class="ci-file">📎 Fichier à joindre</span>';
         return '<div class="cart-item">' +
-          '<h3>' + it.name + '</h3>' +
-          '<span class="ci-p">' + priceLabel + '</span>' +
+          '<div class="ci-head"><h3>' + escapeHtml(it.name) + '</h3><span class="ci-p">' + priceLabel + '</span></div>' +
           '<span class="ci-meta">' + metaLabel + '</span>' +
-          '<div class="qty"><button type="button" data-dec="' + i + '" aria-label="Retirer une unité">−</button>' +
-          '<b>' + it.qty + '</b>' +
-          '<button type="button" data-inc="' + i + '" aria-label="Ajouter une unité">+</button></div>' +
-          '<button class="cart-rm" type="button" data-rm="' + i + '">Retirer</button>' +
+          extraHtml +
+          '<div class="ci-foot">' +
+            '<div class="qty"><button type="button" data-dec="' + i + '" aria-label="Retirer une unité">−</button>' +
+            '<b>' + it.qty + '</b>' +
+            '<button type="button" data-inc="' + i + '" aria-label="Ajouter une unité">+</button></div>' +
+            '<button class="cart-rm" type="button" data-rm="' + i + '">Retirer</button>' +
+          '</div>' +
           '</div>';
       }).join('');
     }
@@ -325,31 +337,39 @@
     }
     $('#cartRows').innerHTML = rowsHtml;
 
-    $('#cartTotal').textContent = tot.sum > 0 ? euro(tot.sum) : (tot.quote ? 'À définir' : euro(0));
+    var cartTotalEl = $('#cartTotal');
+    cartTotalEl.textContent = tot.sum > 0 ? euro(tot.sum) : (tot.quote ? 'Prix à définir selon le modèle' : euro(0));
+    cartTotalEl.classList.toggle('is-text', tot.sum <= 0 && tot.quote);
     var cartNote = tot.quote
       ? 'Le poids de certaines pièces reste à définir : leur prix sera fixé avec vous avant l\'impression.'
       : 'Estimation d\'après les poids indiqués. Le prix est confirmé après passage au trancheur.';
-    var nextTier = nextBulkTier(tot.qty);
-    if (tot.raw > 0 && nextTier) {
-      var missingPieces = nextTier[0] - tot.qty;
-      cartNote += ' Encore ' + missingPieces + (missingPieces > 1 ? ' pièces' : ' pièce') + ' pour −' + Math.round(nextTier[1] * 100) + ' % de remise.';
+    if (tot.qty > 0) {
+      if (tot.discount > 0 && tot.raw <= 0) {
+        cartNote += ' Vous aurez −' + Math.round(tot.discount * 100) + ' % sur le prix final.';
+      } else {
+        var nextTier = nextBulkTier(tot.qty);
+        if (nextTier) {
+          var missingPieces = nextTier[0] - tot.qty;
+          cartNote += ' Encore ' + missingPieces + (missingPieces > 1 ? ' pièces' : ' pièce') + ' pour −' + Math.round(nextTier[1] * 100) + ' % de remise.';
+        }
+      }
     }
     $('#cartNote').textContent = cartNote;
-
-    var note = $('#formNote');
-    if (note) {
-      note.textContent = cart.length
-        ? 'Votre panier (' + n + (n > 1 ? ' pièces' : ' pièce') + ') sera ajouté au message.'
-        : 'Votre panier en cours sera ajouté au message.';
-    }
     save();
   }
 
-  function addItem(name, g, qty) {
+  function addItem(name, g, qty, extra) {
     var existing = null;
-    cart.forEach(function (it) { if (it.name === name && it.g === g) existing = it; });
-    if (existing) existing.qty += (qty || 1);
-    else cart.push({ name: name, g: g, qty: qty || 1 });
+    if (!extra) {
+      cart.forEach(function (it) { if (it.name === name && it.g === g && !it.desc && !it.file) existing = it; });
+    }
+    if (existing) {
+      existing.qty += (qty || 1);
+    } else {
+      var item = { name: name, g: g, qty: qty || 1 };
+      if (extra) { for (var k in extra) item[k] = extra[k]; }
+      cart.push(item);
+    }
     renderCart();
   }
 
@@ -416,8 +436,11 @@
     var lines = cart.map(function (it) {
       var t = lineTotal(it.g, it.qty);
       var weightPart = it.g ? ' (≈ ' + it.g + ' g)' : '';
-      return '• ' + it.name + ' × ' + it.qty + weightPart + ' : ' +
+      var line = '• ' + it.name + ' × ' + it.qty + weightPart + ' : ' +
         (t === null ? 'à définir' : euro(t));
+      if (it.desc) line += '\n  ↳ ' + it.desc;
+      if (it.file) line += '\n  ↳ 📎 Fichier à joindre';
+      return line;
     });
     var tot = cartTotals();
     if (tot.discount > 0 && tot.raw > 0) {
@@ -439,25 +462,38 @@
 
   renderCart();
 
-  /* ── formulaire → copie du message ────────────────────── */
-  var waForm = $('#waForm');
-  if (waForm) {
-    waForm.addEventListener('submit', function (e) {
+  /* ── produit personnalisé → ajout au panier ───────────── */
+  var customForm = $('#customForm');
+  if (customForm) {
+    customForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      var ta = $('#waMsg');
-      var msg = ta.value.trim();
-      if (!msg && !cart.length) {
-        ta.classList.add('err');
-        ta.focus();
-        toast('Écrivez un mot, ou ajoutez une idée à votre panier');
+      var nameEl = $('#cpName'), weightEl = $('#cpWeight'), qtyEl = $('#cpQty'),
+          descEl = $('#cpDesc'), fileEl = $('#cpFile');
+
+      var name = nameEl.value.trim();
+      var g = +weightEl.value;
+      var q = Math.max(1, Math.round(+qtyEl.value) || 1);
+      var bad = false;
+
+      if (!name) { nameEl.classList.add('err'); bad = true; } else nameEl.classList.remove('err');
+      if (!g || g <= 0) { weightEl.classList.add('err'); bad = true; } else weightEl.classList.remove('err');
+      if (bad) {
+        toast('Indiquez au moins le nom et le poids approximatif');
         return;
       }
-      ta.classList.remove('err');
-      var text = msg || 'Bonjour ! Je voudrais faire imprimer ces pièces :';
-      if (cart.length) text += '\n\n' + quoteText();
-      copyText(text, 'Message copié ! Collez-le dans WhatsApp et envoyez-le-moi.');
+
+      var extra = {};
+      if (descEl.value.trim()) extra.desc = descEl.value.trim();
+      if (fileEl.checked) extra.file = true;
+
+      addItem(name, g, q, extra);
+      discountToast(name);
+      openDrawer();
+
+      nameEl.value = ''; weightEl.value = ''; qtyEl.value = 1; descEl.value = ''; fileEl.checked = false;
     });
-    $('#waMsg').addEventListener('input', function () { this.classList.remove('err'); });
+    $('#cpName').addEventListener('input', function () { this.classList.remove('err'); });
+    $('#cpWeight').addEventListener('input', function () { this.classList.remove('err'); });
   }
 
   var closeBox = $('#msgBoxClose');
