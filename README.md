@@ -115,6 +115,29 @@ s'appliquent :
 
 Modifier `BULK_TIERS` (paliers ou taux) suffit à ajuster la remise partout.
 
+## Galerie
+
+Section `#galerie` (entre les idées et les tarifs, pour rassurer avant de
+parler prix) : de vraies photos de pièces déjà imprimées, en mise en page
+« masonry » (colonnes CSS, `.gallery{ columns: 4 220px; }`) qui respecte le
+format de chaque photo sans la recadrer.
+
+Les fichiers vivent dans `assets/img/gallery/` — réorientés (rotation EXIF
+appliquée), réduits à 1400 px sur le plus grand côté et compressés en JPEG
+qualité ~80, pour un total d'environ 1 Mo pour 8 photos. Pour ajouter une
+photo : déposez-la dans ce dossier, puis ajoutez un bloc dans `index.html` :
+
+```html
+<figure class="gphoto">
+  <img src="assets/img/gallery/nom-du-fichier.jpg" width="…" height="…" loading="lazy" alt="Description de la pièce et de son contexte">
+  <figcaption><b>Nom court</b><span>Détail en une ligne</span></figcaption>
+</figure>
+```
+
+`width`/`height` (les dimensions réelles du fichier) évitent un saut de mise
+en page pendant le chargement ; `loading="lazy"` diffère le chargement des
+photos hors écran.
+
 ## Idées d'impression
 
 La section « Idées » n'est pas un catalogue produit : pas de prix, pas de
@@ -160,8 +183,10 @@ listées en HTML dans `index.html`, bloc `.swatches`.
 
 ## Contenu des fichiers
 
-- `index.html` — sections : héros, idées, tarifs, estimateur, déroulé,
-  matière, FAQ, contact (formulaire de produit personnalisé), tiroir panier.
+- `index.html` — sections : héros, idées, galerie, tarifs, estimateur,
+  déroulé, matière, FAQ, contact (formulaire de produit personnalisé),
+  tiroir panier.
+- `assets/img/gallery/` — photos de pièces réellement imprimées.
 - `assets/css/styles.css` — thèmes clair et sombre par variables CSS, mise en
   page responsive, animations.
 - `assets/js/app.js` — barème, remise quantité, idées, estimateur, produit

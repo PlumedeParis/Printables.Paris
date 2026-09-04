@@ -291,6 +291,23 @@ code{ font-family: var(--mono); font-size: .88em; background: var(--surface-2); 
 .idea:active{ transform: translateY(0); }
 .idea.done{ background: var(--ok); border-color: var(--ok); color:#fff; }
 
+/* galerie */
+.gallery{ columns: 4 220px; column-gap: 1.1rem; }
+.gphoto{
+  margin: 0 0 1.1rem; break-inside: avoid; display: inline-block; width: 100%;
+  background: var(--surface); border:1px solid var(--line); border-radius: 6px;
+  overflow: hidden; box-shadow: var(--shadow-s);
+  transition: transform .28s cubic-bezier(.2,.8,.3,1), box-shadow .28s ease, border-color .2s ease;
+}
+.gphoto:hover{ transform: translateY(-4px); box-shadow: var(--shadow-m); border-color: var(--line-firm); }
+.gphoto img{ display:block; width:100%; height:auto; }
+.gphoto figcaption{ padding: .8rem 1rem .95rem; }
+.gphoto figcaption b{ display:block; font-family: var(--display); font-size:.95rem; letter-spacing:-.01em; }
+.gphoto figcaption span{
+  display:block; margin-top:.2rem; font-family: var(--mono); font-size:.72rem;
+  color: var(--muted); letter-spacing:.01em;
+}
+
 /* échelle de tarifs */
 .ladder{ list-style:none; margin:0; padding:0; display:grid; gap:.35rem; }
 .ladder li{
