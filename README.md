@@ -2,7 +2,7 @@
 
 Site statique (HTML / CSS / JavaScript, sans dépendance ni build) : idées
 d'objets à imprimer, grille tarifaire au poids, estimateur de prix, panier en
-ligne et demande préparée pour WhatsApp.
+ligne et demande préparée pour WhatsApp ou email.
 
 Impression en PLA uniquement, sur **Bambu Lab A1 Combo** (volume
 256 × 256 × 256 mm, jusqu'à 4 couleurs avec l'AMS lite).
@@ -19,18 +19,26 @@ Publiable tel quel sur GitHub Pages (branche + dossier racine).
 
 ## Comment part une demande
 
-Aucun serveur, aucune base de données, aucune adresse email, aucun numéro de
-téléphone publié. Le panier se remplit en cliquant une idée ou en décrivant
-une pièce personnalisée (voir plus bas) ; le bouton « Copier ma demande », dans
-le tiroir du panier, compose le détail complet et le place dans le
-presse-papiers du visiteur, qui le colle dans WhatsApp.
+Aucun serveur, aucune base de données. Le panier se remplit en cliquant une
+idée ou en décrivant une pièce personnalisée (voir plus bas) ; le tiroir du
+panier propose ensuite deux boutons, tous deux déclenchés par le visiteur —
+rien ne part sans lui :
 
-Si le navigateur refuse la copie automatique (`navigator.clipboard` puis
-`document.execCommand` en secours), le texte s'affiche dans une zone
-sélectionnable — le visiteur n'est jamais bloqué.
+- **Copier pour WhatsApp** — compose le détail complet et le place dans le
+  presse-papiers du visiteur, qui le colle dans WhatsApp. Si le navigateur
+  refuse la copie automatique (`navigator.clipboard` puis
+  `document.execCommand` en secours), le texte s'affiche dans une zone
+  sélectionnable — le visiteur n'est jamais bloqué. Un lien `wa.me` avait été
+  essayé au départ : il est refusé par la politique de sécurité (CSP) de
+  certains hébergeurs de prévisualisation, d'où la copie ;
+- **Envoyer par email** — ouvre un lien `mailto:` déjà adressé à
+  `CONTACT_EMAIL` (constante en tête de `assets/js/app.js`), sujet et corps du
+  message pré-remplis, dans le client mail du visiteur ; il ne reste qu'à
+  appuyer sur envoyer.
 
-Un lien `wa.me` avait été essayé au départ : il est refusé par la politique de
-sécurité (CSP) de certains hébergeurs de prévisualisation, d'où la copie.
+Les deux boutons appellent la même fonction `fullMessage()`, qui compose le
+texte à partir de `quoteText()` — un seul endroit à modifier pour changer le
+contenu du message, quel que soit le canal choisi.
 
 ## Grille tarifaire
 

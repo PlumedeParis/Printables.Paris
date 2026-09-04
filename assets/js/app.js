@@ -1,12 +1,20 @@
 /* ══════════════════════════════════════════════════════════
    Printables — logique du site
 
-   Les boutons « envoyer » ne partent pas tout seuls : ils
-   COPIENT le message dans le presse-papiers, à coller ensuite
-   dans WhatsApp. Aucun serveur, aucune adresse email.
+   Aucun serveur, aucune base de données. Deux façons d'envoyer
+   la demande, toutes deux déclenchées par le visiteur :
+   - WhatsApp : le message est COPIÉ dans le presse-papiers, à
+     coller ensuite dans la discussion ;
+   - Email : un brouillon s'ouvre dans le client mail du visiteur
+     (lien mailto:), déjà adressé et rempli — il ne reste qu'à
+     appuyer sur envoyer.
    ══════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
+
+  /* ── contact ────────────────────────────────────────────
+     Adresse qui reçoit les demandes par email. */
+  var CONTACT_EMAIL = 'llorenz.oliver.fouchet@gmail.com';
 
   /* Tarif : 20 g = 3 €, 50 g = 6 €, 100 g = 12 €, 150 g = 20 €,
      200 g = 27 €. Entre deux paliers, prix au prorata.
@@ -456,10 +464,23 @@
     return lines.join('\n');
   }
 
+  function fullMessage() {
+    return 'Bonjour ! Je voudrais faire imprimer :\n\n' + quoteText();
+  }
+
   $('#sendQuote').addEventListener('click', function () {
     if (!cart.length) { toast('Ajoutez d\'abord une idée à votre panier'); return; }
-    copyText('Bonjour ! Je voudrais faire imprimer :\n\n' + quoteText(),
-      'Panier copié ! Collez-le dans WhatsApp et envoyez-le-moi.');
+    copyText(fullMessage(), 'Panier copié ! Collez-le dans WhatsApp et envoyez-le-moi.');
+  });
+
+  $('#sendMail').addEventListener('click', function () {
+    if (!cart.length) { toast('Ajoutez d\'abord une idée à votre panier'); return; }
+    var subject = 'Demande d\'impression 3D — Printables';
+    var url = 'mailto:' + CONTACT_EMAIL +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(fullMessage());
+    toast('Ouverture de votre application mail…');
+    window.location.href = url;
   });
 
   renderCart();

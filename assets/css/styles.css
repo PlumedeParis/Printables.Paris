@@ -537,6 +537,7 @@ input[type=range]:active::-webkit-slider-thumb{ transform: scale(1.15); }
 .cart-rm:hover{ color:#C8102E; }
 .cart-empty{ color: var(--muted); font-size:.92rem; }
 .drawer-foot{ padding:1.1rem 1.2rem; border-top:1px solid var(--line); background: var(--surface-2); display:grid; gap:.7rem; }
+.send-choices{ display:grid; gap:.6rem; }
 .drawer-rows{ display:grid; gap:.35rem; }
 .drawer-rows:empty{ display:none; }
 .drawer-row{ display:flex; justify-content:space-between; font-size:.83rem; color: var(--muted); }
