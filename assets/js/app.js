@@ -5,16 +5,24 @@
    la demande, toutes deux déclenchées par le visiteur :
    - WhatsApp : le message est COPIÉ dans le presse-papiers, à
      coller ensuite dans la discussion ;
-   - Email : un brouillon s'ouvre dans le client mail du visiteur
-     (lien mailto:), déjà adressé et rempli — il ne reste qu'à
-     appuyer sur envoyer.
+   - Email : envoyé directement depuis le site (via Web3Forms), sans
+     ouvrir le client mail du visiteur — voir plus bas.
    ══════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
   /* ── contact ────────────────────────────────────────────
-     Adresse qui reçoit les demandes par email. */
-  var CONTACT_EMAIL = 'llorenz.oliver.fouchet@gmail.com';
+     L'email part directement depuis le site (pas de mailto:, donc
+     pas besoin que le visiteur ait une appli mail configurée) via
+     Web3Forms — un service gratuit, sans backend à héberger.
+     Pour l'activer : allez sur https://web3forms.com, entrez
+     l'adresse qui doit recevoir les demandes (ici
+     llorenz.oliver.fouchet@gmail.com), confirmez-la depuis le mail
+     reçu, puis collez la clé d'accès fournie ci-dessous. Tant que
+     WEB3FORMS_KEY est vide, le bouton email prévient que ce n'est
+     pas encore configuré plutôt que d'échouer silencieusement.    */
+  var WEB3FORMS_KEY = '';
+  var CONTACT_EMAIL = 'llorenz.oliver.fouchet@gmail.com'; // adresse qui reçoit les demandes, pour référence
 
   /* Tarif : 20 g = 3 €, 50 g = 6 €, 100 g = 12 €, 150 g = 20 €,
      200 g = 27 €. Entre deux paliers, prix au prorata.
@@ -475,12 +483,44 @@
 
   $('#sendMail').addEventListener('click', function () {
     if (!cart.length) { toast('Ajoutez d\'abord une idée à votre panier'); return; }
-    var subject = 'Demande d\'impression 3D — Printables';
-    var url = 'mailto:' + CONTACT_EMAIL +
-      '?subject=' + encodeURIComponent(subject) +
-      '&body=' + encodeURIComponent(fullMessage());
-    toast('Ouverture de votre application mail…');
-    window.location.href = url;
+    if (!WEB3FORMS_KEY) {
+      toast('Envoi par email pas encore activé : écrivez-moi sur WhatsApp en attendant.');
+      return;
+    }
+
+    var btn = this;
+    var oldLabel = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours…';
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: 'Demande d\'impression 3D — Printables',
+        from_name: 'Site Printables',
+        message: fullMessage()
+      })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.success) {
+          toast('Message envoyé ! Je reçois votre demande directement.');
+          cart = [];
+          renderCart();
+          closeDrawer();
+        } else {
+          toast('Échec de l\'envoi : réessayez, ou écrivez-moi sur WhatsApp.');
+        }
+      })
+      .catch(function () {
+        toast('Échec de l\'envoi (connexion) : réessayez, ou écrivez-moi sur WhatsApp.');
+      })
+      .finally(function () {
+        btn.disabled = false;
+        btn.innerHTML = oldLabel;
+      });
   });
 
   renderCart();
