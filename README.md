@@ -2,10 +2,15 @@
 
 Site statique (HTML / CSS / JavaScript, sans dépendance ni build) : idées
 d'objets à imprimer, grille tarifaire au poids, estimateur de prix, panier en
-ligne et demande préparée pour WhatsApp ou email.
+ligne et demande préparée pour email ou WhatsApp.
 
 Impression en PLA uniquement, sur **Bambu Lab A1 Combo** (volume
 256 × 256 × 256 mm, jusqu'à 4 couleurs avec l'AMS lite).
+
+Palette bleu cobalt (`--accent`) et rouille (`--secondary`), sur un fond
+gris-bleu froid — tous les jetons de couleur sont définis en variables CSS en
+tête de `assets/css/styles.css`, déclinées pour le thème clair et le thème
+sombre ; changer une couleur là suffit à la répercuter partout sur le site.
 
 ## Lancer le site
 
@@ -22,19 +27,21 @@ Publiable tel quel sur GitHub Pages (branche + dossier racine).
 Aucun serveur, aucune base de données. Le panier se remplit en cliquant une
 idée ou en décrivant une pièce personnalisée (voir plus bas) ; le tiroir du
 panier propose ensuite deux boutons, tous deux déclenchés par le visiteur —
-rien ne part sans lui :
+rien ne part sans lui. L'email est mis en avant (bouton plein, en premier) ;
+WhatsApp reste disponible juste en dessous (bouton en contour) :
 
+- **Envoyer par email** — ouvre un lien `mailto:` déjà adressé à
+  `CONTACT_EMAIL` (constante en tête de `assets/js/app.js`), sujet et corps du
+  message pré-remplis, dans le client mail du visiteur ; il ne reste qu'à
+  appuyer sur envoyer. C'est aussi ce bouton (icône enveloppe) qu'on retrouve
+  en CTA principal du héros ;
 - **Copier pour WhatsApp** — compose le détail complet et le place dans le
   presse-papiers du visiteur, qui le colle dans WhatsApp. Si le navigateur
   refuse la copie automatique (`navigator.clipboard` puis
   `document.execCommand` en secours), le texte s'affiche dans une zone
   sélectionnable — le visiteur n'est jamais bloqué. Un lien `wa.me` avait été
   essayé au départ : il est refusé par la politique de sécurité (CSP) de
-  certains hébergeurs de prévisualisation, d'où la copie ;
-- **Envoyer par email** — ouvre un lien `mailto:` déjà adressé à
-  `CONTACT_EMAIL` (constante en tête de `assets/js/app.js`), sujet et corps du
-  message pré-remplis, dans le client mail du visiteur ; il ne reste qu'à
-  appuyer sur envoyer.
+  certains hébergeurs de prévisualisation, d'où la copie.
 
 Les deux boutons appellent la même fonction `fullMessage()`, qui compose le
 texte à partir de `quoteText()` — un seul endroit à modifier pour changer le
