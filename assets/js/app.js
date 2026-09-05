@@ -21,7 +21,7 @@
      reçu, puis collez la clé d'accès fournie ci-dessous. Tant que
      WEB3FORMS_KEY est vide, le bouton email prévient que ce n'est
      pas encore configuré plutôt que d'échouer silencieusement.    */
-  var WEB3FORMS_KEY = '';
+  var WEB3FORMS_KEY = '4de633fe-65e2-4a3f-bd13-d02d50620c67';
   var CONTACT_EMAIL = 'llorenz.oliver.fouchet@gmail.com'; // adresse qui reçoit les demandes, pour référence
 
   /* Tarif : 20 g = 3 €, 50 g = 6 €, 100 g = 12 €, 150 g = 20 €,
