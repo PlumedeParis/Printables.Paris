@@ -494,11 +494,6 @@ input[type=range]:active::-webkit-slider-thumb{ transform: scale(1.15); }
   outline:none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
 }
 .lab input.err, .lab textarea.err{ border-color:#C8102E; }
-.check{
-  display:flex; align-items:center; gap:.6rem; font-family: var(--body);
-  font-size:.9rem; color: var(--ink-soft); cursor:pointer;
-}
-.check input{ width:18px; height:18px; accent-color: var(--accent); cursor:pointer; flex:0 0 auto; }
 .form-note{ font-size:.82rem; color: var(--muted); }
 .form-note.ok{ color: var(--ok); }
 

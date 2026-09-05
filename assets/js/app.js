@@ -86,6 +86,16 @@
     return u === null ? null : Math.round(u * qty * 100) / 100;
   }
 
+  /* prix d'une ligne de panier : le prix visé (saisi directement,
+     pièce sur devis) prime sur le prix calculé au poids.          */
+  function itemUnitPrice(it) {
+    return (it.price != null) ? it.price : priceFor(it.g);
+  }
+  function itemLineTotal(it) {
+    var u = itemUnitPrice(it);
+    return u === null ? null : Math.round(u * it.qty * 100) / 100;
+  }
+
   /* ── idées ──────────────────────────────────────────────
      De simples pistes pour s'inspirer : pas de prix fixe, pas
      de lien, pas de photo. Le prix dépend toujours du poids
@@ -303,7 +313,7 @@
     var raw = 0, quote = false, qty = 0;
     cart.forEach(function (it) {
       qty += it.qty;
-      var t = lineTotal(it.g, it.qty);
+      var t = itemLineTotal(it);
       if (t === null) quote = true; else raw += t;
     });
     raw = Math.round(raw * 100) / 100;
@@ -322,14 +332,16 @@
       body.innerHTML = '<p class="cart-empty">Votre panier est vide. Cliquez sur une idée ci-dessus, ou ajoutez une pièce sur mesure depuis l\'estimateur.</p>';
     } else {
       body.innerHTML = cart.map(function (it, i) {
-        var t = lineTotal(it.g, it.qty);
+        var t = itemLineTotal(it);
         var priceLabel = t === null ? 'À définir' : euro(t);
-        var metaLabel = it.g
-          ? '≈ ' + it.g + ' g · ' + (priceFor(it.g) === null ? 'sur mesure' : euro(priceFor(it.g)) + ' / pièce')
-          : 'Poids à définir ensemble';
+        var metaLabel = it.price != null
+          ? euro(it.price) + ' / pièce visé · à confirmer'
+          : (it.g
+            ? '≈ ' + it.g + ' g · ' + (priceFor(it.g) === null ? 'sur mesure' : euro(priceFor(it.g)) + ' / pièce')
+            : 'Poids à définir ensemble');
         var extraHtml = '';
         if (it.desc) extraHtml += '<p class="ci-desc">' + escapeHtml(it.desc) + '</p>';
-        if (it.file) extraHtml += '<span class="ci-file">📎 Fichier à joindre</span>';
+        if (it.file) extraHtml += '<span class="ci-file">📎 ' + escapeHtml(it.file) + ' — à m\'envoyer ensuite</span>';
         return '<div class="cart-item">' +
           '<div class="ci-head"><h3>' + escapeHtml(it.name) + '</h3><span class="ci-p">' + priceLabel + '</span></div>' +
           '<span class="ci-meta">' + metaLabel + '</span>' +
@@ -451,12 +463,12 @@
   function quoteText() {
     if (!cart.length) return '';
     var lines = cart.map(function (it) {
-      var t = lineTotal(it.g, it.qty);
-      var weightPart = it.g ? ' (≈ ' + it.g + ' g)' : '';
+      var t = itemLineTotal(it);
+      var weightPart = it.g ? ' (≈ ' + it.g + ' g)' : (it.price != null ? ' (prix visé)' : '');
       var line = '• ' + it.name + ' × ' + it.qty + weightPart + ' : ' +
         (t === null ? 'à définir' : euro(t));
       if (it.desc) line += '\n  ↳ ' + it.desc;
-      if (it.file) line += '\n  ↳ 📎 Fichier à joindre';
+      if (it.file) line += '\n  ↳ 📎 ' + it.file + ' (à envoyer séparément, non joint automatiquement)';
       return line;
     });
     var tot = cartTotals();
@@ -582,33 +594,33 @@
   if (customForm) {
     customForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      var nameEl = $('#cpName'), weightEl = $('#cpWeight'), qtyEl = $('#cpQty'),
+      var nameEl = $('#cpName'), priceEl = $('#cpPrice'), qtyEl = $('#cpQty'),
           descEl = $('#cpDesc'), fileEl = $('#cpFile');
 
       var name = nameEl.value.trim();
-      var g = +weightEl.value;
+      var price = +priceEl.value;
       var q = Math.max(1, Math.round(+qtyEl.value) || 1);
       var bad = false;
 
       if (!name) { nameEl.classList.add('err'); bad = true; } else nameEl.classList.remove('err');
-      if (!g || g <= 0) { weightEl.classList.add('err'); bad = true; } else weightEl.classList.remove('err');
+      if (!price || price <= 0) { priceEl.classList.add('err'); bad = true; } else priceEl.classList.remove('err');
       if (bad) {
-        toast('Indiquez au moins le nom et le poids approximatif');
+        toast('Indiquez au moins le nom et le prix visé');
         return;
       }
 
-      var extra = {};
+      var extra = { price: Math.round(price * 100) / 100 };
       if (descEl.value.trim()) extra.desc = descEl.value.trim();
-      if (fileEl.checked) extra.file = true;
+      if (fileEl.files && fileEl.files[0]) extra.file = fileEl.files[0].name;
 
-      addItem(name, g, q, extra);
+      addItem(name, null, q, extra);
       discountToast(name);
       openDrawer();
 
-      nameEl.value = ''; weightEl.value = ''; qtyEl.value = 1; descEl.value = ''; fileEl.checked = false;
+      nameEl.value = ''; priceEl.value = ''; qtyEl.value = 1; descEl.value = ''; fileEl.value = '';
     });
     $('#cpName').addEventListener('input', function () { this.classList.remove('err'); });
-    $('#cpWeight').addEventListener('input', function () { this.classList.remove('err'); });
+    $('#cpPrice').addEventListener('input', function () { this.classList.remove('err'); });
   }
 
   var closeBox = $('#msgBoxClose');

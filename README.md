@@ -169,22 +169,27 @@ prix réel vient toujours de l'estimateur ou d'un échange direct.
 ## Produit personnalisé
 
 La section Contact (`#customForm` dans `index.html`) n'est plus un simple
-champ de message libre : c'est un petit formulaire (nom du produit, poids
-approximatif, quantité, description, case « je joindrai un fichier ») qui
-ajoute directement une ligne au panier, comme une idée ou une pièce de
-l'estimateur.
+champ de message libre : c'est un petit formulaire (nom du produit, prix
+visé, quantité, description, sélecteur de fichier) qui ajoute directement
+une ligne au panier, comme une idée ou une pièce de l'estimateur.
 
-- le poids saisi calcule un prix indicatif avec la même grille tarifaire
-  (`priceFor()`) — pas de champ de prix séparé ;
-- la description et le drapeau « fichier » sont stockés sur l'article du
+- le prix est saisi directement par le visiteur (`it.price`, indicatif —
+  « à confirmer ») plutôt que calculé à partir d'un poids : pour ces
+  articles, `itemUnitPrice()`/`itemLineTotal()` (`assets/js/app.js`)
+  utilisent `it.price` en priorité, et ne retombent sur `priceFor(it.g)`
+  que pour les pièces de l'estimateur (qui restent au poids) ;
+- la description et le nom du fichier choisi sont stockés sur l'article du
   panier (`it.desc`, `it.file`) et réapparaissent dans la carte du panier et
-  dans le message copié pour WhatsApp (précédés de `↳`, avec un rappel
-  « 📎 Fichier à joindre » si la case est cochée) — cocher la case n'attache
-  aucun fichier réel, c'est un pense-bête pour ne pas l'oublier à l'envoi ;
-- nom et description viennent d'un champ texte libre : ils passent par
-  `escapeHtml()` avant d'être insérés dans le panier (`innerHTML`), pour
-  éviter toute injection de balises. Le texte copié pour WhatsApp reste du
-  texte brut, jamais interprété comme du HTML.
+  dans le message copié pour WhatsApp ou envoyé par email (précédés de `↳`) ;
+- **le fichier n'est pas transmis automatiquement** : Web3Forms ne permet
+  d'attacher un vrai fichier à l'email que sur un abonnement payant (Pro).
+  Le sélecteur de fichier ne fait donc que récupérer son nom (`File.name`),
+  affiché dans le message pour que je sache à quoi m'attendre — le visiteur
+  doit ensuite me l'envoyer lui-même (réponse à l'email ou WhatsApp) ;
+- nom, description et nom de fichier viennent d'un champ texte libre : ils
+  passent par `escapeHtml()` avant d'être insérés dans le panier
+  (`innerHTML`), pour éviter toute injection de balises. Le texte copié pour
+  WhatsApp reste du texte brut, jamais interprété comme du HTML.
 
 ## Couleurs
 

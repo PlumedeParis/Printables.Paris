@@ -352,9 +352,9 @@
         <h2>Décrivez votre pièce</h2>
         <p>Vous avez un projet précis en tête&nbsp;? Décrivez-le ci-contre, il rejoint votre panier avec un prix indicatif. Ouvrez ensuite le panier pour m'envoyer votre demande complète par email — ou sur WhatsApp si vous préférez.</p>
         <ul class="contact-list">
-          <li><span>Vous précisez</span><b>Le nom, le poids approximatif et la description</b></li>
-          <li><span>Fichier en main&nbsp;?</span><b>Cochez la case, je vous le redemande à l'envoi</b></li>
-          <li><span>Vous recevez</span><b>Le poids exact et le prix ferme</b></li>
+          <li><span>Vous précisez</span><b>Le nom, le prix visé et la description</b></li>
+          <li><span>Fichier en main&nbsp;?</span><b>Sélectionnez-le, son nom part avec le message</b></li>
+          <li><span>Vous recevez</span><b>Le prix confirmé après passage au trancheur</b></li>
         </ul>
       </div>
 
@@ -363,8 +363,8 @@
           <input id="cpName" name="nom" type="text" placeholder="Ex. : boîtier pour capteur de porte">
         </label>
         <div class="row">
-          <label class="lab" for="cpWeight">Poids à peu près
-            <input id="cpWeight" name="poids" type="number" min="1" max="2000" step="1" inputmode="numeric" placeholder="ex. 60 g">
+          <label class="lab" for="cpPrice">Prix visé
+            <input id="cpPrice" name="prix" type="number" min="1" max="500" step="0.5" inputmode="decimal" placeholder="ex. 15 €">
           </label>
           <label class="lab" for="cpQty">Quantité
             <input id="cpQty" name="quantite" type="number" min="1" max="50" step="1" value="1" inputmode="numeric">
@@ -373,11 +373,10 @@
         <label class="lab" for="cpDesc">Description
           <textarea id="cpDesc" name="description" rows="4" placeholder="Usage, forme, contraintes particulières…"></textarea>
         </label>
-        <label class="check">
-          <input type="checkbox" id="cpFile">
-          Je joindrai un fichier (.stl, .3mf, photo…)
+        <label class="lab" for="cpFile">Un fichier à joindre&nbsp;? (.stl, .3mf, photo…)
+          <input id="cpFile" name="fichier" type="file" accept=".stl,.3mf,.obj,.step,.stp,.zip,image/*,.pdf">
         </label>
-        <p class="form-note" id="cpNote" role="status">Poids et prix indicatifs, confirmés après passage au trancheur.</p>
+        <p class="form-note" id="cpNote" role="status">Prix visé par pièce, indicatif — confirmé après passage au trancheur. Le fichier n'est pas transmis automatiquement ici : son nom apparaît dans le message, à vous de me l'envoyer ensuite (réponse à l'email ou WhatsApp).</p>
         <button class="btn btn-primary full" type="submit">Ajouter au panier</button>
       </form>
     </div>
