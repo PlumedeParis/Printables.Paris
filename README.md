@@ -30,16 +30,22 @@ panier propose ensuite deux boutons, tous deux déclenchés par le visiteur —
 rien ne part sans lui. L'email est mis en avant (bouton plein, en premier) ;
 WhatsApp reste disponible juste en dessous (bouton en contour) :
 
-- **Envoyer par email** — part directement depuis le site, sans ouvrir le
-  client mail du visiteur (il n'a donc pas besoin d'en avoir un configuré) :
-  un appel `fetch()` poste le message à [Web3Forms](https://web3forms.com),
-  un service gratuit qui relaie vers `CONTACT_EMAIL`, sans backend à héberger.
-  C'est aussi ce bouton (icône enveloppe) qu'on retrouve en CTA principal du
-  héros. Configuration en une fois : créez une clé sur web3forms.com (il
-  suffit de confirmer l'adresse qui doit recevoir les demandes), puis collez
-  cette clé dans `WEB3FORMS_KEY` en tête de `assets/js/app.js`. Tant que
-  `WEB3FORMS_KEY` est vide, le bouton prévient que l'envoi n'est pas encore
-  activé plutôt que d'échouer silencieusement ;
+- **Envoyer par email** — ouvre une petite fenêtre (`#mailModal` dans
+  `index.html`) demandant le nom et l'email du visiteur ; une fois validés
+  (les deux champs sont requis, l'email doit avoir une forme correcte), un
+  appel `fetch()` poste la demande à [Web3Forms](https://web3forms.com), un
+  service gratuit qui relaie vers `CONTACT_EMAIL`, sans backend à héberger —
+  le client mail du visiteur ne s'ouvre jamais. Le nom et l'email sont
+  transmis comme champs `name`/`email` : Web3Forms les affiche dans le mail
+  reçu et utilise l'email comme adresse de réponse directe. Ils sont aussi
+  mémorisés dans `localStorage` (`printables.contact.v1`) pour préremplir la
+  fenêtre à la prochaine visite. C'est aussi ce bouton (icône enveloppe)
+  qu'on retrouve en CTA principal du héros. Configuration en une fois :
+  créez une clé sur web3forms.com (il suffit de confirmer l'adresse qui doit
+  recevoir les demandes), puis collez cette clé dans `WEB3FORMS_KEY` en tête
+  de `assets/js/app.js`. Tant que `WEB3FORMS_KEY` est vide, la fenêtre
+  prévient que l'envoi n'est pas encore activé plutôt que d'échouer
+  silencieusement ;
 - **Copier pour WhatsApp** — compose le détail complet et le place dans le
   presse-papiers du visiteur, qui le colle dans WhatsApp. Si le navigateur
   refuse la copie automatique (`navigator.clipboard` puis

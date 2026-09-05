@@ -443,6 +443,24 @@
   </footer>
 </aside>
 
+<div class="modal-back" id="mailModalBack" hidden></div>
+<div class="modal" id="mailModal" role="dialog" aria-modal="true" aria-labelledby="mailModalTitle" hidden>
+  <div class="modal-head">
+    <h2 id="mailModalTitle">Pour vous répondre</h2>
+    <button class="modal-x" id="mailModalClose" type="button" aria-label="Fermer">✕</button>
+  </div>
+  <form class="form" id="mailModalForm" novalidate>
+    <label class="lab" for="mmName">Votre nom
+      <input id="mmName" name="nom" type="text" autocomplete="name" placeholder="Prénom Nom">
+    </label>
+    <label class="lab" for="mmEmail">Votre email
+      <input id="mmEmail" name="email" type="email" autocomplete="email" placeholder="vous@exemple.com">
+    </label>
+    <p class="form-note">Pour que je puisse vous recontacter avec un devis.</p>
+    <button class="btn btn-primary full" type="submit">Envoyer la demande</button>
+  </form>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="assets/js/app.js"></script>

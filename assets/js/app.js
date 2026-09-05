@@ -443,6 +443,7 @@
   back.addEventListener('click', closeDrawer);
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
+    if (!mailModal.hidden) { closeMailModal(); return; }
     if (!drawer.hidden) closeDrawer();
     if ($('#nav').classList.contains('open')) toggleNav(false);
   });
@@ -481,15 +482,64 @@
     copyText(fullMessage(), 'Panier copié ! Collez-le dans WhatsApp et envoyez-le-moi.');
   });
 
+  /* ── modal « vos coordonnées » avant l'envoi par email ──
+     On demande le nom et l'email juste avant l'envoi (pas avant,
+     dans le panier) pour ne le faire qu'une fois, seulement si le
+     visiteur choisit le canal email. `email` sert de Reply-To côté
+     Web3Forms : la réponse part directement vers le client.        */
+  var CKEY = 'printables.contact.v1';
+  var mailModal = $('#mailModal'), mailModalBack = $('#mailModalBack');
+  var mmName = $('#mmName'), mmEmail = $('#mmEmail');
+  var mailModalLastFocus = null;
+
+  try {
+    var savedContact = JSON.parse(localStorage.getItem(CKEY));
+    if (savedContact) {
+      mmName.value = savedContact.nom || '';
+      mmEmail.value = savedContact.email || '';
+    }
+  } catch (e) { /* navigation privée */ }
+
+  function openMailModal() {
+    mailModalLastFocus = document.activeElement;
+    mmName.classList.remove('err');
+    mmEmail.classList.remove('err');
+    mailModal.hidden = false; mailModalBack.hidden = false;
+    document.body.style.overflow = 'hidden';
+    (mmName.value ? mmEmail : mmName).focus();
+  }
+  function closeMailModal() {
+    mailModal.hidden = true; mailModalBack.hidden = true;
+    document.body.style.overflow = '';
+    if (mailModalLastFocus) mailModalLastFocus.focus();
+  }
+  $('#mailModalClose').addEventListener('click', closeMailModal);
+  mailModalBack.addEventListener('click', closeMailModal);
+
   $('#sendMail').addEventListener('click', function () {
     if (!cart.length) { toast('Ajoutez d\'abord une idée à votre panier'); return; }
+    openMailModal();
+  });
+
+  $('#mailModalForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = mmName.value.trim();
+    var email = mmEmail.value.trim();
+    var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    mmName.classList.toggle('err', !name);
+    mmEmail.classList.toggle('err', !emailOk);
+    if (!name || !emailOk) {
+      toast('Indiquez votre nom et une adresse email valide');
+      return;
+    }
+    try { localStorage.setItem(CKEY, JSON.stringify({ nom: name, email: email })); } catch (e) { /* navigation privée */ }
     if (!WEB3FORMS_KEY) {
       toast('Envoi par email pas encore activé : écrivez-moi sur WhatsApp en attendant.');
       return;
     }
 
-    var btn = this;
-    var oldLabel = btn.innerHTML;
+    var btn = this.querySelector('button[type="submit"]');
+    var oldLabel = btn.textContent;
     btn.disabled = true;
     btn.textContent = 'Envoi en cours…';
 
@@ -499,16 +549,18 @@
       body: JSON.stringify({
         access_key: WEB3FORMS_KEY,
         subject: 'Demande d\'impression 3D — Printables',
-        from_name: 'Site Printables',
+        name: name,
+        email: email,
         message: fullMessage()
       })
     })
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data && data.success) {
-          toast('Message envoyé ! Je reçois votre demande directement.');
+          toast('Message envoyé ! Je vous recontacte à ' + email + '.');
           cart = [];
           renderCart();
+          closeMailModal();
           closeDrawer();
         } else {
           toast('Échec de l\'envoi : réessayez, ou écrivez-moi sur WhatsApp.');
@@ -519,7 +571,7 @@
       })
       .finally(function () {
         btn.disabled = false;
-        btn.innerHTML = oldLabel;
+        btn.textContent = oldLabel;
       });
   });
 
